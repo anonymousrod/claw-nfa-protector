@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLAW NFA Protector — BNB Chain AI Bodyguard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #050508;
+  --s1:      #0d0d14;
+  --s2:      #121219;
+  --s3:      #18181f;
+  --border:  rgba(255,255,255,0.07);
+  --b2:      rgba(255,255,255,0.04);
+  --green:   #00e5a0;
+  --green2:  #00ffb3;
+  --gdim:    rgba(0,229,160,0.1);
+  --gdim2:   rgba(0,229,160,0.05);
+  --amber:   #ffb020;
+  --red:     #ff4d4d;
+  --blue:    #4d9eff;
+  --text:    #dde6f0;
+  --muted:   rgba(221,230,240,0.4);
+  --faint:   rgba(221,230,240,0.2);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  overflow-x:hidden;
+}
+
+/* GRAIN */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:999;
+}
+
+/* GRID BG */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(0,229,160,0.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,229,160,0.015) 1px,transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+
+/* ── NAV ─────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 48px;
+  background:rgba(5,5,8,0.85);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.9rem;font-weight:700;
+  letter-spacing:0.08em;color:var(--green);
+}
+.nav-logo span{
+  font-size:1.3rem;
+  filter:drop-shadow(0 0 8px rgba(0,229,160,0.5));
+}
+.nav-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.2em;
+  color:var(--amber);
+  border:1px solid rgba(255,176,32,0.3);
+  padding:4px 12px;border-radius:2px;
+  animation:badgePulse 2s ease infinite;
+}
+@keyframes badgePulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+/* ── HERO ─────────────────────────────── */
+.hero{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  padding-top:72px;
+}
+
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 64px 80px 80px;
+  position:relative;
+}
+
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.25em;
+  color:var(--green);
+  border:1px solid rgba(0,229,160,0.25);
+  padding:6px 14px;border-radius:2px;
+  margin-bottom:28px;
+  width:fit-content;
+  animation:fadeUp 0.7s ease both;
+}
+.pill-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:badgePulse 1.5s ease infinite;
+}
+
+h1{
+  font-size:clamp(2.6rem,4.5vw,4rem);
+  font-weight:700;line-height:1.06;
+  color:#fff;margin-bottom:24px;
+  animation:fadeUp 0.7s 0.1s ease both;
+}
+h1 .accent{
+  color:var(--green);
+  text-shadow:0 0 30px rgba(0,229,160,0.25);
+}
+h1 .line2{
+  display:block;
+  color:rgba(255,255,255,0.55);
+  font-weight:300;
+}
+
+.hero-desc{
+  font-size:1.05rem;
+  color:var(--muted);line-height:1.75;
+  max-width:500px;margin-bottom:44px;
+  animation:fadeUp 0.7s 0.15s ease both;
+}
+.hero-desc strong{color:var(--text);font-weight:600;}
+
+/* Deploy CTA */
+.deploy-cta{
+  animation:fadeUp 0.7s 0.2s ease both;
+}
+.deploy-box{
+  background:var(--s2);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px 24px;
+  margin-bottom:16px;
+}
+.deploy-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.25em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:10px;
+}
+.deploy-cmd{
+  display:flex;align-items:center;gap:12px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.82rem;color:var(--text);
+}
+.deploy-cmd .p{color:var(--green);opacity:0.6;}
+.deploy-sub{
+  font-size:0.78rem;color:var(--faint);
+  line-height:1.5;
+}
+
+/* Stats row */
+.stats-row{
+  display:flex;gap:36px;
+  margin-top:40px;
+  animation:fadeUp 0.7s 0.3s ease both;
+}
+.stat{border-left:2px solid rgba(0,229,160,0.3);padding-left:14px;}
+.stat-val{
+  font-size:1.6rem;font-weight:700;
+  color:var(--green);
+  font-variant-numeric:tabular-nums;
+}
+.stat-lbl{
+  font-size:0.72rem;letter-spacing:0.08em;
+  color:var(--muted);margin-top:2px;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── CHAT PANEL ───────────────────────── */
+.hero-right{
+  position:sticky;top:72px;
+  height:calc(100vh - 72px);
+  display:flex;flex-direction:column;
+  background:var(--s1);
+  border-left:1px solid var(--border);
+}
+
+.chat-top{
+  padding:18px 22px;
+  border-bottom:1px solid var(--border);
+  background:var(--s2);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.chat-agent{display:flex;align-items:center;gap:10px;}
+.agent-avatar{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--gdim);
+  border:1px solid rgba(0,229,160,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;
+}
+.agent-name{font-size:0.88rem;font-weight:600;color:var(--text);}
+.agent-status{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.12em;
+  color:var(--green);
+}
+.agent-status::before{content:'● ';animation:badgePulse 1.5s ease infinite;}
+
+.onchain-badge{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.58rem;letter-spacing:0.1em;
+  color:var(--amber);
+  border:1px solid rgba(255,176,32,0.25);
+  padding:3px 8px;border-radius:2px;
+}
+
+/* Quick tabs */
+.tabs{
+  display:flex;gap:0;
+  border-bottom:1px solid var(--border);
+  background:var(--s2);
+  overflow-x:auto;
+  flex-shrink:0;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.1em;
+  color:var(--muted);
+  padding:9px 16px;
+  border:none;background:none;cursor:pointer;
+  white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all 0.2s;
+}
+.tab:hover{color:var(--green);background:var(--gdim2);}
+.tab.active{color:var(--green);border-bottom-color:var(--green);}
+
+/* Messages */
+.msgs{
+  flex:1;overflow-y:auto;
+  padding:20px 18px;
+  display:flex;flex-direction:column;gap:14px;
+  scroll-behavior:smooth;
+}
+.msgs::-webkit-scrollbar{width:3px;}
+.msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);}
+
+.row{display:flex;gap:8px;align-items:flex-end;}
+.row.user{flex-direction:row-reverse;}
+
+.bubble{
+  max-width:88%;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:0.8rem;line-height:1.55;
+  animation:popIn 0.25s ease both;
+}
+@keyframes popIn{
+  from{opacity:0;transform:scale(0.95) translateY(6px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.bubble.user{
+  background:rgba(0,229,160,0.12);
+  border:1px solid rgba(0,229,160,0.18);
+  color:var(--text);border-bottom-right-radius:3px;
+}
+.bubble.bot{
+  background:var(--s3);
+  border:1px solid var(--border);
+  color:var(--text);border-bottom-left-radius:3px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;white-space:pre-wrap;
+  line-height:1.65;
+}
+.bubble.bot.rich{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:0.8rem;white-space:normal;
+}
+
+.typing{
+  display:flex;align-items:center;gap:4px;
+  padding:10px 14px;
+  background:var(--s3);border:1px solid var(--border);
+  border-radius:12px;border-bottom-left-radius:3px;
+  width:fit-content;
+}
+.td{width:5px;height:5px;border-radius:50%;background:var(--green);
+  animation:tdBounce 1.1s ease infinite;}
+.td:nth-child(2){animation-delay:0.18s;}
+.td:nth-child(3){animation-delay:0.36s;}
+@keyframes tdBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+
+/* Input */
+.input-area{
+  padding:14px 18px;
+  border-top:1px solid var(--border);
+  background:var(--s2);
+  display:flex;gap:10px;align-items:center;
+  flex-shrink:0;
+}
+.cinput{
+  flex:1;background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:8px;padding:9px 14px;
+  font-family:'Space Grotesk',sans-serif;font-size:0.8rem;
+  color:var(--text);outline:none;transition:border-color 0.2s;
+}
+.cinput:focus{border-color:rgba(0,229,160,0.3);}
+.cinput::placeholder{color:var(--faint);}
+.sbtn{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--green);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.85rem;transition:all 0.15s;flex-shrink:0;
+}
+.sbtn:hover{transform:scale(1.08);box-shadow:0 0 16px rgba(0,229,160,0.4);}
+
+/* ── CARDS inside messages ── */
+.audit-card{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;line-height:1.7;}
+.card-title{font-weight:700;font-size:0.75rem;color:#fff;margin-bottom:4px;}
+.card-sep{color:var(--border);margin:6px 0;}
+.risk-row{display:flex;gap:7px;margin:2px 0;align-items:flex-start;}
+.score-wrap{margin:8px 0;}
+.score-track{height:5px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-top:4px;}
+.score-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(0.2,1,0.3,1);}
+.v-box{
+  margin-top:10px;padding:7px 12px;border-radius:4px;
+  font-weight:700;font-size:0.72rem;letter-spacing:0.06em;
+}
+.v-danger{background:rgba(255,77,77,0.12);color:var(--red);border:1px solid rgba(255,77,77,0.25);}
+.v-warn{background:rgba(255,176,32,0.1);color:var(--amber);border:1px solid rgba(255,176,32,0.25);}
+.v-safe{background:rgba(0,229,160,0.08);color:var(--green);border:1px solid rgba(0,229,160,0.2);}
+
+/* NFA Deploy animation */
+.deploy-animation{
+  display:flex;flex-direction:column;gap:6px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.68rem;
+  color:var(--muted);
+}
+.deploy-step{
+  display:flex;align-items:center;gap:8px;
+  opacity:0;animation:stepIn 0.3s ease forwards;
+}
+.deploy-step .check{color:var(--green);}
+.deploy-step .spin{
+  width:10px;height:10px;border-radius:50%;
+  border:1.5px solid var(--green);border-top-color:transparent;
+  animation:spin 0.8s linear infinite;
+  flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes stepIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+
+.chain-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.6rem;
+  color:var(--amber);border:1px solid rgba(255,176,32,0.25);
+  padding:2px 8px;border-radius:2px;margin-top:6px;
+}
+
+/* ── SECTION: HOW IT WORKS ── */
+.section{
+  padding:100px 80px;
+  position:relative;
+}
+
+.section-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;letter-spacing:0.3em;
+  color:rgba(0,229,160,0.6);text-transform:uppercase;
+  margin-bottom:14px;
+}
+.section-title{
+  font-size:2.4rem;font-weight:700;
+  color:#fff;margin-bottom:12px;line-height:1.1;
+}
+.section-title .acc{color:var(--green);}
+.section-sub{
+  font-size:1rem;color:var(--muted);
+  max-width:600px;line-height:1.7;margin-bottom:64px;
+}
+
+/* Flow steps */
+.flow{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px;
+}
+.flow-step{
+  background:var(--s1);
+  border:1px solid var(--border);
+  padding:28px 24px;border-radius:8px;
+  position:relative;overflow:hidden;
+  transition:all 0.3s;
+}
+.flow-step::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.flow-step:hover{border-color:rgba(0,229,160,0.25);transform:translateY(-4px);}
+.flow-step:hover::before{opacity:1;}
+.flow-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:2.2rem;font-weight:700;
+  color:rgba(0,229,160,0.08);
+  position:absolute;top:12px;right:16px;
+}
+.flow-icon{font-size:1.5rem;margin-bottom:12px;}
+.flow-title{
+  font-size:0.9rem;font-weight:700;
+  color:var(--green);margin-bottom:8px;letter-spacing:0.04em;
+}
+.flow-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+
+/* Commands grid */
+.cmds-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+}
+.cmd-card{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:8px;padding:24px;
+  cursor:pointer;transition:all 0.25s;
+}
+.cmd-card:hover{
+  border-color:rgba(0,229,160,0.3);
+  background:rgba(0,229,160,0.04);
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(0,0,0,0.3);
+}
+.cmd-tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.8rem;font-weight:700;
+  color:var(--green);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.cmd-name{font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:6px;}
+.cmd-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.free-tag{
+  display:inline-block;margin-top:10px;
+  font-family:'IBM Plex Mono',monospace;font-size:0.55rem;
+  letter-spacing:0.15em;padding:2px 7px;
+  border:1px solid rgba(0,229,160,0.2);color:rgba(0,229,160,0.5);
+  border-radius:2px;
+}
+
+/* Cost breakdown */
+.cost-table{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;max-width:640px;
+}
+.cost-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px;border-bottom:1px solid var(--border);
+  font-size:0.85rem;
+}
+.cost-row:last-child{border-bottom:none;}
+.cost-item{color:var(--muted);}
+.cost-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.78rem;font-weight:700;color:var(--green);
+}
+.cost-row.total{
+  background:rgba(0,229,160,0.04);
+}
+.cost-row.total .cost-val{font-size:1rem;}
+
+/* OpenClaw section */
+.openclaw-block{
+  display:flex;gap:48px;align-items:flex-start;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:8px;padding:40px 48px;
+}
+.oc-left{flex:1;}
+.oc-title{font-size:1.3rem;font-weight:700;color:#fff;margin-bottom:12px;}
+.oc-desc{font-size:0.88rem;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+.oc-install{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:6px;padding:16px 20px;
+}
+.oc-install .icmd{
+  font-family:'IBM Plex Mono',monospace;font-size:0.75rem;
+  color:var(--text);display:flex;gap:10px;margin:4px 0;
+}
+.oc-install .p{color:var(--green);opacity:0.6;}
+.oc-right{
+  flex-shrink:0;width:200px;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:12px;
+}
+.oc-logo{
+  width:80px;height:80px;border-radius:16px;
+  background:var(--gdim);border:1px solid rgba(0,229,160,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;
+}
+.oc-name{font-weight:700;color:var(--green);font-size:1rem;}
+.oc-free{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--muted);}
+
+/* Footer */
+footer{
+  border-top:1px solid var(--border);
+  padding:32px 80px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--s1);
+}
+.footer-left{
+  font-family:'IBM Plex Mono',monospace;font-size:0.65rem;
+  color:var(--faint);letter-spacing:0.1em;
+}
+.footer-right{
+  font-size:0.78rem;color:var(--faint);
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span>🛡️</span> CLAW NFA PROTECTOR
+  </div>
+  <div class="nav-badge">BNB CHAIN · BAP-578 · ERC-8004</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="pill">
+      <div class="pill-dot"></div>
+      OPENCLAW SKILL · BNB CHAIN · 100% GRATUIT
+    </div>
+
+    <h1>
+      Ton garde du corps<br>
+      <span class="accent">IA personnel</span>
+      <span class="line2">qui vit on-chain.</span>
+    </h1>
+
+    <p class="hero-desc">
+      Un <strong>agent IA autonome</strong> déployé sur BNB Chain qui surveille 24h/7j tes tokens, tes positions et tes échanges P2P — et t'alerte <strong>avant</strong> que tu perdes de l'argent.
+      <br><br>
+      Pas un dashboard. Pas un bot. <strong>Un NFA vivant qui t'appartient.</strong>
+    </p>
+
+    <div class="deploy-cta">
+      <div class="deploy-box">
+        <div class="deploy-label">// Démarrer en 3 commandes</div>
+        <div class="deploy-cmd"><span class="p">$</span> npm i -g openclaw</div>
+        <div class="deploy-cmd"><span class="p">$</span> clawhub install claw-nfa-protector</div>
+        <div class="deploy-cmd"><span class="p">></span> Déploie mon Protector NFA</div>
+      </div>
+      <div class="deploy-sub">Tourne localement sur ta machine · Aucun serveur · Tes clés ne quittent jamais ton appareil</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-val">$0</div>
+        <div class="stat-lbl">Coût total</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">0.002 BNB</div>
+        <div class="stat-lbl">Déploiement testnet</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">30s</div>
+        <div class="stat-lbl">Audit d'un token</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT DEMO -->
+  <div class="hero-right">
+    <div class="chat-top">
+      <div class="chat-agent">
+        <div class="agent-avatar">🛡️</div>
+        <div>
+          <div class="agent-name">NFA Protector</div>
+          <div class="agent-status">actif · NFA #42 en ligne</div>
+        </div>
+      </div>
+      <div class="onchain-badge">⬡ ON-CHAIN</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(this,'deploy')">🚀 Déployer</button>
+      <button class="tab" onclick="switchTab(this,'audit')">🔍 Audit Token</button>
+      <button class="tab" onclick="switchTab(this,'p2p')">🤝 P2P Shield</button>
+      <button class="tab" onclick="switchTab(this,'guard')">📡 Garde Position</button>
+      <button class="tab" onclick="switchTab(this,'explain')">📚 Expliquer</button>
+    </div>
+
+    <div class="msgs" id="msgs">
+      <div class="row">
+        <div class="bubble bot rich">👋 <strong>NFA Protector actif.</strong><br>Je surveille le marché en temps réel. Dis-moi ce que tu veux faire — ou tape une commande.</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input class="cinput" id="ci" placeholder="Tape une commande..." onkeydown="if(event.key==='Enter')send()"/>
+      <button class="sbtn" onclick="send()">↑</button>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="background:var(--s1);border-top:1px solid var(--border)">
+  <div class="section-label">// Architecture</div>
+  <h2 class="section-title">Comment ça <span class="acc">fonctionne</span></h2>
+  <p class="section-sub">Contrairement aux bots réactifs, ton NFA est un agent autonome avec son propre wallet on-chain. Il agit en permanence — pas juste quand tu lui poses une question.</p>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-icon">💬</div>
+      <div class="flow-title">Tu parles à OpenClaw</div>
+      <div class="flow-desc">Via WhatsApp, Telegram ou Discord. En français ou anglais. "Déploie mon Protector avec risque max 20%"</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-icon">⬡</div>
+      <div class="flow-title">Ton NFA se déploie</div>
+      <div class="flow-desc">OpenClaw déploie un smart contract BAP-578 sur BNB Chain. Ton NFA a son propre wallet. C'est à toi — comme un NFT vivant.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-icon">🔍</div>
+      <div class="flow-title">Il surveille en continu</div>
+      <div class="flow-desc">Toutes les 30 minutes, ton NFA scanne tes tokens, positions et vendeurs P2P. Si danger → il te réveille.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-icon">✅</div>
+      <div class="flow-title">Tu restes aux commandes</div>
+      <div class="flow-desc">Ton NFA alerte et propose. Toi tu approuves. Il ne fait jamais rien sans ton accord. Ton argent reste entre tes mains.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMANDS -->
+<section class="section">
+  <div class="section-label">// 5 super-pouvoirs</div>
+  <h2 class="section-title">Tout ce que ton <span class="acc">NFA sait faire</span></h2>
+  <p class="section-sub">Clique sur une commande pour voir la démo en live →</p>
+
+  <div class="cmds-grid">
+    <div class="cmd-card" onclick="switchTabAndDemo('deploy')">
+      <div class="cmd-tag">🚀 <span>/deploy</span></div>
+      <div class="cmd-name">Déployer ton NFA</div>
+      <div class="cmd-desc">Crée ton agent personnel sur BNB Chain avec son wallet propre. Une fois déployé, il tourne 24/7 même si tu fermes l'app.</div>
+      <div class="free-tag">TESTNET · ~0.002 tBNB</div>
+    </div>
+    <div class="cmd-card" onclick="switchTabAndDemo('audit')">
+      <div class="cmd-tag">🔍 <span>/audit</span></div>
+      <div class="cmd-name">Audit Smart Contract</div>
+      <div class="cmd-desc">Détecte rug pulls, honeypots, mint illimité, dumps du deployer — en 30 secondes sur n'importe quel token BSC.</div>
+      <div class="free-tag">API BSCSCAN GRATUITE</div>
+    </div>
+    <div class="cmd-card" onclick="switchTabAndDemo('p2p')">
+      <div class="cmd-tag">🤝 <span>/p2p</span></div>
+      <div class="cmd-name">P2P Shield</div>
+      <div class="cmd-desc">Scanne un vendeur Binance P2P avant que tu envoies un centime. Taux de complétion, historique, patterns de scam.</div>
+      <div class="free-tag">API P2P PUBLIQUE</div>
+    </div>
+    <div class="cmd-card" onclick="switchTabAndDemo('guard')">
+      <div class="cmd-tag">📡 <span>/guard</span></div>
+      <div class="cmd-name">Garde Position</div>
+      <div class="cmd-desc">Surveille ton levier et tes positions en continu. Te réveille à 3h du matin si tu approches la liquidation.</div>
+      <div class="free-tag">API BINANCE PUBLIQUE</div>
+    </div>
+    <div class="cmd-card" onclick="switchTabAndDemo('explain')">
+      <div class="cmd-tag">📚 <span>/explain</span></div>
+      <div class="cmd-name">Crypto Educator</div>
+      <div class="cmd-desc">Explique n'importe quel concept crypto en langage clair, avec une analogie du quotidien et un exemple Binance concret.</div>
+      <div class="free-tag">POUR TOUS LES NIVEAUX</div>
+    </div>
+    <div class="cmd-card" onclick="switchTabAndDemo('tax')">
+      <div class="cmd-tag">💰 <span>/tax</span></div>
+      <div class="cmd-name">Rapport Fiscal P&L</div>
+      <div class="cmd-desc">Génère ton bilan annuel depuis l'historique Binance. Gains, pertes, CSV prêt pour ton comptable en quelques secondes.</div>
+      <div class="free-tag">CLÉ API LECTURE SEULE</div>
+    </div>
+  </div>
+</section>
+
+<!-- COST -->
+<section class="section" style="background:var(--s1);border-top:1px solid var(--border)">
+  <div class="section-label">// Budget</div>
+  <h2 class="section-title">Coût total : <span class="acc">Zéro.</span></h2>
+  <p class="section-sub">Tout repose sur des APIs gratuites et du logiciel open-source. La seule dépense est quelques centimes de BNB pour déployer sur testnet — qu'on obtient gratuitement via faucet.</p>
+
+  <div class="cost-table">
+    <div class="cost-row">
+      <span class="cost-item">OpenClaw (agent local)</span>
+      <span class="cost-val">GRATUIT · Open Source</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">BSCScan API (audits)</span>
+      <span class="cost-val">GRATUIT · 5 req/sec</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Binance P2P API publique</span>
+      <span class="cost-val">GRATUIT · Sans auth</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Binance Market Data API</span>
+      <span class="cost-val">GRATUIT · Sans auth</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">BNB Testnet (faucet.bnbchain.org)</span>
+      <span class="cost-val">GRATUIT · 0.5 tBNB/jour</span>
+    </div>
+    <div class="cost-row">
+      <span class="cost-item">Déploiement NFA sur testnet</span>
+      <span class="cost-val">~0.002 tBNB ≈ $0.001</span>
+    </div>
+    <div class="cost-row total">
+      <span class="cost-item" style="font-weight:700;color:var(--text)">TOTAL</span>
+      <span class="cost-val" style="color:var(--green)">$0.00</span>
+    </div>
+  </div>
+</section>
+
+<!-- OPENCLAW -->
+<section class="section">
+  <div class="section-label">// Stack</div>
+  <h2 class="section-title">Propulsé par <span class="acc">OpenClaw</span></h2>
+
+  <div class="openclaw-block">
+    <div class="oc-left">
+      <div class="oc-title">Pourquoi OpenClaw est parfait pour ça</div>
+      <p class="oc-desc">
+        OpenClaw est un assistant IA personnel open-source qui tourne sur ta machine, se connecte à WhatsApp/Telegram/Discord, garde une mémoire persistante de tout ce que tu lui dis, et peut exécuter des tâches en arrière-plan en continu (heartbeats). C'est exactement l'infrastructure dont un NFA Protector a besoin.
+        <br><br>
+        Ton NFA est un "Skill" OpenClaw — un fichier Markdown avec des instructions et des scripts Python qui étend les capacités de l'agent. Il peut accéder aux APIs, appeler des scripts shell, interagir avec BNB Chain, et te contacter sur Telegram à n'importe quelle heure.
+      </p>
+      <div class="oc-install">
+        <div class="icmd"><span class="p">$</span> npm i -g openclaw</div>
+        <div class="icmd"><span class="p">$</span> clawhub install claw-nfa-protector</div>
+        <div class="icmd"><span class="p">$</span> pip install web3 requests python-dotenv</div>
+        <div class="icmd"><span class="p">></span> "Déploie mon Protector NFA risque 20%"</div>
+      </div>
+    </div>
+    <div class="oc-right">
+      <div class="oc-logo">🦞</div>
+      <div class="oc-name">OpenClaw</div>
+      <div class="oc-free">open-source · local · gratuit</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">CLAW NFA PROTECTOR · OPENCLAW × BINANCE BUILDER CHALLENGE · MARCH 2026</div>
+  <div class="footer-right">BNB Chain · BAP-578 · ERC-8004 · 100% Open Source</div>
+</footer>
+
+<script>
+// ── DEMO DATA ──────────────────────────────────────────────────
+const DEMOS = {
+  deploy: {
+    msg: "Déploie mon Protector NFA avec risque max 20% et scan rugs sur BSC",
+    reply: (c) => {
+      c.className = "bubble bot rich";
+      c.innerHTML = `<div class="audit-card">
+<div class="card-title">🚀 Déploiement NFA en cours...</div>
+<div style="margin:10px 0">
+<div class="deploy-animation" id="da">
+  <div class="deploy-step" style="animation-delay:0.1s"><div class="spin"></div> Génération du wallet NFA...</div>
+  <div class="deploy-step" style="animation-delay:0.9s"><div class="spin"></div> Compilation NFAProtector.sol...</div>
+  <div class="deploy-step" style="animation-delay:1.7s"><div class="spin"></div> Déploiement sur BNB Testnet...</div>
+</div>
+</div></div>`;
+      // After delay, show success
+      setTimeout(() => {
+        c.innerHTML = `<div class="audit-card">
+<div class="card-title">🛡️ NFA DÉPLOYÉ — <span style="color:var(--green)">SUCCÈS</span></div>
+<div style="margin:8px 0;font-size:0.68rem;color:var(--muted)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+Nom: <span style="color:#fff">Mon Protecteur BSC</span>
+Token ID: <span style="color:var(--green)">#42</span>
+Wallet NFA: <span style="color:var(--amber)">0x7f3a...9b2c</span>
+Réseau: BNB Chain Testnet
+Tolérance risque: 20/100
+
+<div class="chain-badge">⬡ TX: 0x4f2a...8e91 · CONFIRMÉ</div>
+
+<div style="margin-top:10px;color:var(--text)">
+Ton NFA est <strong>vivant on-chain.</strong>
+Il va maintenant surveiller en continu.
+
+→ /guard BTC pour surveiller une position
+→ /audit 0x... pour analyser un token
+→ /p2p user pour vérifier un vendeur</div>
+
+<div class="v-box v-safe" style="margin-top:8px">✅ Actif · Surveille toutes les 30 min</div>
+</div>`;
+      }, 3200);
+    }
+  },
+
+  audit: {
+    msg: "/audit 0x4e15361fd6b4bb609fa63c81a2be19d873717870",
+    reply: (c) => {
+      c.className = "bubble bot";
+      c.innerHTML = `⏳ Analyse du contrat en cours...\n\nConnexion BSCScan...\nLecture du code source...\nAnalyse des patterns...`;
+      setTimeout(() => {
+        c.className = "bubble bot rich";
+        c.innerHTML = `<div class="audit-card">
+<div class="card-title">🛡️ AUDIT NFA — MOONX (MX)</div>
+<div style="font-size:0.65rem;color:var(--muted)">0x4e15361fd6b4bb609fa63c81a2be19d873717870</div>
+<div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+<div class="score-wrap">
+SCORE DE RISQUE: <span style="color:var(--red);font-weight:700">17</span>/22
+<div class="score-track"><div class="score-fill" id="sf" style="width:0%;background:var(--red)"></div></div>
+</div>
+
+<div class="risk-row"><span>🔴</span><span>mint() illimité — l'owner peut créer des tokens infiniment</span></div>
+<div class="risk-row"><span>🔴</span><span>Vente bloquée pour non-whitelistés (honeypot)</span></div>
+<div class="risk-row"><span>🔴</span><span>Deployer a vendu 89% de ses tokens il y a 6h</span></div>
+<div class="risk-row"><span>🟠</span><span>Top 3 wallets = 71% du supply</span></div>
+<div class="risk-row"><span>🟠</span><span>Contrat déployé il y a seulement 3 jours</span></div>
+<div class="risk-row"><span>🟢</span><span>Source code vérifié sur BSCScan</span></div>
+
+<div class="v-box v-danger">⛔ VERDICT : DANGER — NE PAS ACHETER</div>
+
+Pattern classique de rug pull. Le deployer a déjà quitté. Tu peux acheter mais tu ne peux pas vendre.
+
+<div style="margin-top:8px;font-size:0.65rem;color:var(--muted)">⚠️ Ceci n'est pas un conseil financier.</div>
+</div>`;
+        setTimeout(() => { const f = document.getElementById('sf'); if(f) f.style.width='77%'; }, 200);
+      }, 1800);
+    }
+  },
+
+  p2p: {
+    msg: "/p2p binance_seller_2024 — Est-ce que je peux lui faire confiance ?",
+    reply: (c) => {
+      c.className = "bubble bot rich";
+      c.innerHTML = `<div class="audit-card">
+<div class="card-title">🛡️ P2P SHIELD — @binance_seller_2024</div>
+<div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+<div class="risk-row"><span>🟢</span><span>Ancienneté: <strong>847 jours</strong> — compte établi</span></div>
+<div class="risk-row"><span>🟢</span><span>Taux completion: <strong>98.7%</strong> — excellent</span></div>
+<div class="risk-row"><span>🟢</span><span>Total trades: <strong>1,204</strong> — très expérimenté</span></div>
+<div class="risk-row"><span>🟢</span><span>Feedback positif: <strong>99.1%</strong></span></div>
+<div class="risk-row"><span>🟢</span><span>Temps de release moyen: <strong>4 min</strong></span></div>
+<div class="risk-row"><span>🟠</span><span>Prix 1.4% au-dessus du marché — prime normale pour haute réputation</span></div>
+
+<div class="v-box v-safe">✅ VERDICT : SAFE TO TRADE</div>
+
+Vendeur de confiance avec un historique solide. La légère prime de prix est normale pour les vendeurs très bien notés.
+
+<strong>Rappel :</strong> Ne libère JAMAIS les fonds avant confirmation dans ton compte bancaire.</div>`;
+    }
+  },
+
+  guard: {
+    msg: "/guard BTC — surveille ma position 10x levier",
+    reply: (c) => {
+      c.className = "bubble bot rich";
+      c.innerHTML = `<div class="audit-card">
+<div class="card-title">📡 GARDE ACTIVE — BTC/USDT</div>
+<div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+Prix actuel: <span style="color:var(--green)">$83,241.50</span> (+2.14%)
+Volume 24h: $28.4 milliards
+Tendance: <span style="color:var(--green)">BULLISH ↑</span>
+
+<div class="risk-row"><span>🟢</span><span>Prix au-dessus de la EMA 200 — tendance haussière confirmée</span></div>
+<div class="risk-row"><span>🟢</span><span>Volume en hausse — momentum validé</span></div>
+<div class="risk-row"><span>🟠</span><span>Grosse résistance sell à $84,500 — possible frein</span></div>
+
+<div class="v-box v-safe">📡 SURVEILLANCE ACTIVÉE</div>
+
+Je t'alerterai si :
+→ Prix sous $80,200 (support clé)
+→ Levier 10x → liquidation estimée à $75,480
+→ Volume anormal (dump whale potentiel)
+
+<span style="color:var(--muted);font-size:0.65rem">Tu ne rateras rien même si tu dors.</span></div>`;
+    }
+  },
+
+  explain: {
+    msg: "/explain liquidation — je comprends pas trop",
+    reply: (c) => {
+      c.className = "bubble bot rich";
+      c.innerHTML = `<div class="audit-card">
+<div class="card-title">📚 LIQUIDATION — en clair</div>
+<div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+<strong>C'est quoi :</strong>
+Quand ton trade à levier perd tellement que Binance ferme ta position de force pour protéger le prêt.
+
+<strong>Analogie du quotidien :</strong>
+Tu empruntes 900€ pour acheter une montre à 1000€. Si la montre chute à 100€, le prêteur reprend la montre avant qu'elle vaille moins que ta dette.
+
+<strong>Sur Binance concrètement :</strong>
+→ Tu ouvres un LONG BTC 10x avec 1000 USDT
+→ Prix d'entrée: $80,000
+→ Prix de liquidation: ~$72,800
+→ BTC tombe à $72,800
+→ Binance ferme automatiquement
+→ Tu perds tes 1000 USDT
+
+<div class="v-box v-warn">💡 CONSEIL PRATIQUE</div>
+
+Vérifie TOUJOURS ton prix de liquidation avant d'ouvrir une position. Il est affiché dans le panneau de confirmation Futures. Ne jamais utiliser plus de 2x si tu dors plus de 4h consécutives.</div>`;
+    }
+  },
+
+  tax: {
+    msg: "/tax 2025 — génère mon rapport pour le comptable",
+    reply: (c) => {
+      c.className = "bubble bot rich";
+      c.innerHTML = `<div class="audit-card">
+<div class="card-title">📊 RAPPORT FISCAL 2025</div>
+<div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
+
+Gains réalisés: <span style="color:var(--green)">+14,832.40 USDT</span>
+Pertes réalisées: <span style="color:var(--red)">-3,210.00 USDT</span>
+<strong>RÉSULTAT NET: <span style="color:var(--green)">+11,622.40 USDT</span></strong>
+
+MEILLEURS TRADES:
+<div class="risk-row"><span>✅</span><span>BTC: +8,240 USDT (+61%)</span></div>
+<div class="risk-row"><span>✅</span><span>SOL: +4,120 USDT (+142%)</span></div>
+<div class="risk-row"><span>✅</span><span>BNB: +2,472 USDT (+28%)</span></div>
+
+PERTES À DÉCLARER:
+<div class="risk-row"><span>🔴</span><span>ALTX: -3,210 USDT (-98%)</span></div>
+
+Total transactions: 847 · Paires: 23
+
+<div class="v-box v-warn">📄 chainguard-tax-2025.csv sauvegardé</div>
+Consulte un comptable pour les règles fiscales de ton pays.</div>`;
+    }
+  }
+};
+
+// ── STATE ──────────────────────────────────────────────────────
+let busy = false;
+let currentTab = 'deploy';
+
+function switchTab(el, key) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = key;
+}
+
+function switchTabAndDemo(key) {
+  const tabs = document.querySelectorAll('.tab');
+  const map = ['deploy','audit','p2p','guard','explain','tax'];
+  tabs.forEach((t,i) => {
+    if (map[i] === key) { t.classList.add('active'); }
+    else { t.classList.remove('active'); }
+  });
+  currentTab = key;
+  // scroll to chat
+  document.getElementById('ci').value = DEMOS[key]?.msg || '';
+  setTimeout(() => send(), 100);
+}
+
+function send() {
+  if (busy) return;
+  const ci = document.getElementById('ci');
+  const text = ci.value.trim();
+  if (!text) return;
+
+  const key = detectCmd(text) || currentTab;
+  addUser(text);
+  ci.value = '';
+  busy = true;
+
+  const typEl = addTyping();
+  const delay = 800 + Math.random() * 600;
+
+  setTimeout(() => {
+    typEl.remove();
+    const demo = DEMOS[key];
+    if (demo) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      const c = document.createElement('div');
+      c.className = 'bubble bot';
+      row.appendChild(c);
+      document.getElementById('msgs').appendChild(row);
+      demo.reply(c);
+    } else {
+      addBot("Essaie /audit, /p2p, /guard, /tax ou /explain avec une vraie valeur !");
+    }
+    scroll();
+    busy = false;
+  }, delay);
+}
+
+function detectCmd(t) {
+  t = t.toLowerCase();
+  if (t.includes('deploy') || t.includes('déploi')) return 'deploy';
+  if (t.includes('audit') || t.startsWith('0x') || t.includes('contract')) return 'audit';
+  if (t.includes('p2p') || t.includes('vendeur') || t.includes('seller')) return 'p2p';
+  if (t.includes('guard') || t.includes('surveillance') || t.includes('liquidation') || t.includes('surveille')) return 'guard';
+  if (t.includes('explain') || t.includes('expli') || t.includes("c'est quoi") || t.includes('what is')) return 'explain';
+  if (t.includes('tax') || t.includes('fiscal') || t.includes('rapport') || t.includes('p&l')) return 'tax';
+  return null;
+}
+
+function addUser(text) {
+  const msgs = document.getElementById('msgs');
+  const row = document.createElement('div');
+  row.className = 'row user';
+  row.innerHTML = `<div class="bubble user">${esc(text)}</div>`;
+  msgs.appendChild(row);
+  scroll();
+}
+
+function addBot(text) {
+  const msgs = document.getElementById('msgs');
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `<div class="bubble bot rich">${text}</div>`;
+  msgs.appendChild(row);
+  scroll();
+}
+
+function addTyping() {
+  const msgs = document.getElementById('msgs');
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = `<div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  msgs.appendChild(row);
+  scroll();
+  return row;
+}
+
+function scroll() {
+  const msgs = document.getElementById('msgs');
+  setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 60);
+}
+
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Kick off deploy demo on load
+setTimeout(() => {
+  document.getElementById('ci').value = DEMOS.deploy.msg;
+  setTimeout(send, 300);
+}, 900);
+</script>
+</body>
+</html>
