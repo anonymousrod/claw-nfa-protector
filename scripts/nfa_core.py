@@ -133,7 +133,14 @@ def audit_contract(address: str) -> dict:
         f"&address={address}&apikey={BSCSCAN_API}"
     )
     src_data = _safe_get(src_url)
-    result = src_data.get("result", [{}])[0] if src_data else {}
+    result = {}
+    if isinstance(src_data, dict):
+        res_list = src_data.get("result")
+        if isinstance(res_list, list) and len(res_list) > 0:
+            res_obj = res_list[0]
+            if isinstance(res_obj, dict):
+                result = res_obj
+    
     source = result.get("SourceCode", "")
     contract_name = result.get("ContractName", "Unknown")
 
@@ -175,7 +182,14 @@ def audit_contract(address: str) -> dict:
         f"&contractaddress={address}&apikey={BSCSCAN_API}"
     )
     info_data = _safe_get(info_url)
-    token_info = info_data.get("result", [{}])[0] if info_data else {}
+    token_info = {}
+    if isinstance(info_data, dict):
+        res_list = info_data.get("result")
+        if isinstance(res_list, list) and len(res_list) > 0:
+            res_obj = res_list[0]
+            if isinstance(res_obj, dict):
+                token_info = res_obj
+
     token_name = token_info.get("tokenName", contract_name)
     symbol = token_info.get("symbol", "???")
     holders = int(token_info.get("holdersCount", 0))
@@ -192,8 +206,12 @@ def audit_contract(address: str) -> dict:
     )
     creation_data = _safe_get(creation_url)
     deployer = ""
-    if creation_data and creation_data.get("result"):
-        deployer = creation_data["result"][0].get("contractCreator", "")
+    if isinstance(creation_data, dict):
+        res_list = creation_data.get("result")
+        if isinstance(res_list, list) and len(res_list) > 0:
+            res_obj = res_list[0]
+            if isinstance(res_obj, dict):
+                deployer = res_obj.get("contractCreator", "")
 
     # Check deployer token sells
     if deployer:
@@ -204,7 +222,7 @@ def audit_contract(address: str) -> dict:
             f"&sort=desc&apikey={BSCSCAN_API}"
         )
         sell_data = _safe_get(sell_url)
-        if sell_data and sell_data.get("result"):
+        if isinstance(sell_data, dict) and isinstance(sell_data.get("result"), list):
             txs = sell_data["result"][:20]
             # Heuristic: large outflows from deployer = selling
             outflows = [t for t in txs if t.get("from", "").lower() == deployer.lower()]
