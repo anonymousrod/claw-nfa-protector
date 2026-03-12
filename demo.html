@@ -61,6 +61,22 @@ nav{
   backdrop-filter:blur(16px);
   border-bottom:1px solid var(--border);
 }
+.nav-right{display:flex;align-items:center;gap:20px;}
+.lang-switch{
+  display:flex;gap:4px;background:var(--s2);
+  padding:4px;border-radius:4px;border:1px solid var(--border);
+}
+.lang-btn{
+  background:none;border:none;color:var(--muted);
+  font-family:'IBM Plex Mono',monospace;font-size:0.65rem;
+  padding:4px 8px;cursor:pointer;border-radius:2px;
+  transition:all 0.2s;
+}
+.lang-btn.active{background:var(--green);color:var(--bg);font-weight:700;}
+@media(max-width:960px){
+  nav{padding:12px 24px;}
+  .nav-badge{display:none;}
+}
 .nav-logo{
   display:flex;align-items:center;gap:10px;
   font-family:'IBM Plex Mono',monospace;
@@ -523,6 +539,27 @@ footer{
   font-size:0.78rem;color:var(--faint);
 }
 
+/* ── RESPONSIVE ───────────────────────── */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;height:auto;min-height:auto;}
+  .hero-left{padding:60px 24px;order:1;}
+  .hero-right{position:relative;top:0;height:550px;border-left:none;border-bottom:1px solid var(--border);order:2;}
+  .section{padding:60px 24px;}
+  .flow{grid-template-columns:repeat(2,1fr);}
+  .cmds-grid{grid-template-columns:repeat(2,1fr);}
+  .openclaw-block{flex-direction:column;padding:32px 24px;gap:32px;}
+  .oc-right{width:100%;flex-direction:row;justify-content:flex-start;}
+  footer{padding:32px 24px;flex-direction:column;gap:16px;text-align:center;}
+}
+@media(max-width:640px){
+  h1{font-size:2.2rem;}
+  .stats-row{flex-direction:column;gap:20px;}
+  .flow{grid-template-columns:1fr;}
+  .cmds-grid{grid-template-columns:1fr;}
+  .chat-agent .agent-name{font-size:0.75rem;}
+  .onchain-badge{display:none;}
+}
+
 </style>
 </head>
 <body>
@@ -530,26 +567,32 @@ footer{
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <span>🛡️</span> CLAW NFA PROTECTOR
+    <span>🛡️</span> <span data-i18n="nav_title">CLAW NFA PROTECTOR</span>
   </div>
-  <div class="nav-badge">BNB CHAIN · BAP-578 · ERC-8004</div>
+  <div class="nav-right">
+    <div class="nav-badge" data-i18n="nav_badge">BNB CHAIN · BAP-578 · ERC-8004</div>
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('fr')" id="lfr">FR</button>
+      <button class="lang-btn" onclick="setLang('en')" id="len">EN</button>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="pill">
+    <div class="pill" data-i18n="hero_pill">
       <div class="pill-dot"></div>
       OPENCLAW SKILL · BNB CHAIN · 100% GRATUIT
     </div>
 
     <h1>
-      Ton garde du corps<br>
-      <span class="accent">IA personnel</span>
-      <span class="line2">qui vit on-chain.</span>
+      <span data-i18n="h1_line1">Ton garde du corps</span><br>
+      <span class="accent" data-i18n="h1_accent">IA personnel</span>
+      <span class="line2" data-i18n="h1_line2">qui vit on-chain.</span>
     </h1>
 
-    <p class="hero-desc">
+    <p class="hero-desc" data-i18n="hero_desc">
       Un <strong>agent IA autonome</strong> déployé sur BNB Chain qui surveille 24h/7j tes tokens, tes positions et tes échanges P2P — et t'alerte <strong>avant</strong> que tu perdes de l'argent.
       <br><br>
       Pas un dashboard. Pas un bot. <strong>Un NFA vivant qui t'appartient.</strong>
@@ -557,26 +600,26 @@ footer{
 
     <div class="deploy-cta">
       <div class="deploy-box">
-        <div class="deploy-label">// Démarrer en 3 commandes</div>
+        <div class="deploy-label" data-i18n="deploy_label">// Démarrer en 3 commandes</div>
         <div class="deploy-cmd"><span class="p">$</span> npm i -g openclaw</div>
         <div class="deploy-cmd"><span class="p">$</span> clawhub install claw-nfa-protector</div>
-        <div class="deploy-cmd"><span class="p">></span> Déploie mon Protector NFA</div>
+        <div class="deploy-cmd" data-i18n="deploy_cmd_exec"><span class="p">></span> Déploie mon Protector NFA</div>
       </div>
-      <div class="deploy-sub">Tourne localement sur ta machine · Aucun serveur · Tes clés ne quittent jamais ton appareil</div>
+      <div class="deploy-sub" data-i18n="deploy_sub">Tourne localement sur ta machine · Aucun serveur · Tes clés ne quittent jamais ton appareil</div>
     </div>
 
     <div class="stats-row">
       <div class="stat">
         <div class="stat-val">$0</div>
-        <div class="stat-lbl">Coût total</div>
+        <div class="stat-lbl" data-i18n="stat_cost">Coût total</div>
       </div>
       <div class="stat">
         <div class="stat-val">0.002 BNB</div>
-        <div class="stat-lbl">Déploiement testnet</div>
+        <div class="stat-lbl" data-i18n="stat_testnet">Déploiement testnet</div>
       </div>
       <div class="stat">
         <div class="stat-val">30s</div>
-        <div class="stat-lbl">Audit d'un token</div>
+        <div class="stat-lbl" data-i18n="stat_audit">Audit d'un token</div>
       </div>
     </div>
   </div>
@@ -588,18 +631,18 @@ footer{
         <div class="agent-avatar">🛡️</div>
         <div>
           <div class="agent-name">NFA Protector</div>
-          <div class="agent-status">actif · NFA #42 en ligne</div>
+          <div class="agent-status" data-i18n="agent_status">actif · NFA #42 en ligne</div>
         </div>
       </div>
-      <div class="onchain-badge">⬡ ON-CHAIN</div>
+      <div class="onchain-badge" data-i18n="onchain_badge">⬡ ON-CHAIN</div>
     </div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab(this,'deploy')">🚀 Déployer</button>
-      <button class="tab" onclick="switchTab(this,'audit')">🔍 Audit Token</button>
-      <button class="tab" onclick="switchTab(this,'p2p')">🤝 P2P Shield</button>
-      <button class="tab" onclick="switchTab(this,'guard')">📡 Garde Position</button>
-      <button class="tab" onclick="switchTab(this,'explain')">📚 Expliquer</button>
+      <button class="tab active" onclick="switchTab(this,'deploy')" data-i18n="tab_deploy">🚀 Déployer</button>
+      <button class="tab" onclick="switchTab(this,'audit')" data-i18n="tab_audit">🔍 Audit Token</button>
+      <button class="tab" onclick="switchTab(this,'p2p')" data-i18n="tab_p2p">🤝 P2P Shield</button>
+      <button class="tab" onclick="switchTab(this,'guard')" data-i18n="tab_guard">📡 Garde Position</button>
+      <button class="tab" onclick="switchTab(this,'explain')" data-i18n="tab_explain">📚 Expliquer</button>
     </div>
 
     <div class="msgs" id="msgs">
@@ -617,117 +660,117 @@ footer{
 
 <!-- HOW IT WORKS -->
 <section class="section" style="background:var(--s1);border-top:1px solid var(--border)">
-  <div class="section-label">// Architecture</div>
-  <h2 class="section-title">Comment ça <span class="acc">fonctionne</span></h2>
-  <p class="section-sub">Contrairement aux bots réactifs, ton NFA est un agent autonome avec son propre wallet on-chain. Il agit en permanence — pas juste quand tu lui poses une question.</p>
+  <div class="section-label" data-i18n="sec_arch_label">// Architecture</div>
+  <h2 class="section-title"><span data-i18n="sec_arch_title">Comment ça</span> <span class="acc" data-i18n="sec_arch_acc">fonctionne</span></h2>
+  <p class="section-sub" data-i18n="sec_arch_sub">Contrairement aux bots réactifs, ton NFA est un agent autonome avec son propre wallet on-chain. Il agit en permanence — pas juste quand tu lui poses une question.</p>
 
   <div class="flow">
     <div class="flow-step">
       <div class="flow-num">01</div>
       <div class="flow-icon">💬</div>
-      <div class="flow-title">Tu parles à OpenClaw</div>
-      <div class="flow-desc">Via WhatsApp, Telegram ou Discord. En français ou anglais. "Déploie mon Protector avec risque max 20%"</div>
+      <div class="flow-title" data-i18n="flow1_title">Tu parles à OpenClaw</div>
+      <div class="flow-desc" data-i18n="flow1_desc">Via WhatsApp, Telegram ou Discord. En français ou anglais. "Déploie mon Protector avec risque max 20%"</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">02</div>
       <div class="flow-icon">⬡</div>
-      <div class="flow-title">Ton NFA se déploie</div>
-      <div class="flow-desc">OpenClaw déploie un smart contract BAP-578 sur BNB Chain. Ton NFA a son propre wallet. C'est à toi — comme un NFT vivant.</div>
+      <div class="flow-title" data-i18n="flow2_title">Ton NFA se déploie</div>
+      <div class="flow-desc" data-i18n="flow2_desc">OpenClaw déploie un smart contract BAP-578 sur BNB Chain. Ton NFA a son propre wallet. C'est à toi — comme un NFT vivant.</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">03</div>
       <div class="flow-icon">🔍</div>
-      <div class="flow-title">Il surveille en continu</div>
-      <div class="flow-desc">Toutes les 30 minutes, ton NFA scanne tes tokens, positions et vendeurs P2P. Si danger → il te réveille.</div>
+      <div class="flow-title" data-i18n="flow3_title">Il surveille en continu</div>
+      <div class="flow-desc" data-i18n="flow3_desc">Toutes les 30 minutes, ton NFA scanne tes tokens, positions et vendeurs P2P. Si danger → il te réveille.</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">04</div>
       <div class="flow-icon">✅</div>
-      <div class="flow-title">Tu restes aux commandes</div>
-      <div class="flow-desc">Ton NFA alerte et propose. Toi tu approuves. Il ne fait jamais rien sans ton accord. Ton argent reste entre tes mains.</div>
+      <div class="flow-title" data-i18n="flow4_title">Tu restes aux commandes</div>
+      <div class="flow-desc" data-i18n="flow4_desc">Ton NFA alerte et propose. Toi tu approuves. Il ne fait jamais rien sans ton accord. Ton argent reste entre tes mains.</div>
     </div>
   </div>
 </section>
 
 <!-- COMMANDS -->
 <section class="section">
-  <div class="section-label">// 5 super-pouvoirs</div>
-  <h2 class="section-title">Tout ce que ton <span class="acc">NFA sait faire</span></h2>
-  <p class="section-sub">Clique sur une commande pour voir la démo en live →</p>
+  <div class="section-label" data-i18n="sec_powers_label">// 5 super-pouvoirs</div>
+  <h2 class="section-title" data-i18n="sec_powers_title">Tout ce que ton <span class="acc">NFA sait faire</span></h2>
+  <p class="section-sub" data-i18n="sec_powers_sub">Clique sur une commande pour voir la démo en live →</p>
 
   <div class="cmds-grid">
     <div class="cmd-card" onclick="switchTabAndDemo('deploy')">
       <div class="cmd-tag">🚀 <span>/deploy</span></div>
-      <div class="cmd-name">Déployer ton NFA</div>
-      <div class="cmd-desc">Crée ton agent personnel sur BNB Chain avec son wallet propre. Une fois déployé, il tourne 24/7 même si tu fermes l'app.</div>
-      <div class="free-tag">TESTNET · ~0.002 tBNB</div>
+      <div class="cmd-name" data-i18n="cmd_deploy_name">Déployer ton NFA</div>
+      <div class="cmd-desc" data-i18n="cmd_deploy_desc">Crée ton agent personnel sur BNB Chain avec son wallet propre. Une fois déployé, il tourne 24/7 même si tu fermes l'app.</div>
+      <div class="free-tag" data-i18n="cmd_deploy_tag">TESTNET · ~0.002 tBNB</div>
     </div>
     <div class="cmd-card" onclick="switchTabAndDemo('audit')">
       <div class="cmd-tag">🔍 <span>/audit</span></div>
-      <div class="cmd-name">Audit Smart Contract</div>
-      <div class="cmd-desc">Détecte rug pulls, honeypots, mint illimité, dumps du deployer — en 30 secondes sur n'importe quel token BSC.</div>
-      <div class="free-tag">API BSCSCAN GRATUITE</div>
+      <div class="cmd-name" data-i18n="cmd_audit_name">Audit Smart Contract</div>
+      <div class="cmd-desc" data-i18n="cmd_audit_desc">Détecte rug pulls, honeypots, mint illimité, dumps du deployer — en 30 secondes sur n'importe quel token BSC.</div>
+      <div class="free-tag" data-i18n="cmd_audit_tag">API BSCSCAN GRATUITE</div>
     </div>
     <div class="cmd-card" onclick="switchTabAndDemo('p2p')">
       <div class="cmd-tag">🤝 <span>/p2p</span></div>
-      <div class="cmd-name">P2P Shield</div>
-      <div class="cmd-desc">Scanne un vendeur Binance P2P avant que tu envoies un centime. Taux de complétion, historique, patterns de scam.</div>
-      <div class="free-tag">API P2P PUBLIQUE</div>
+      <div class="cmd-name" data-i18n="cmd_p2p_name">P2P Shield</div>
+      <div class="cmd-desc" data-i18n="cmd_p2p_desc">Scanne un vendeur Binance P2P avant que tu envoies un centime. Taux de complétion, historique, patterns de scam.</div>
+      <div class="free-tag" data-i18n="cmd_p2p_tag">API P2P PUBLIQUE</div>
     </div>
     <div class="cmd-card" onclick="switchTabAndDemo('guard')">
       <div class="cmd-tag">📡 <span>/guard</span></div>
-      <div class="cmd-name">Garde Position</div>
-      <div class="cmd-desc">Surveille ton levier et tes positions en continu. Te réveille à 3h du matin si tu approches la liquidation.</div>
-      <div class="free-tag">API BINANCE PUBLIQUE</div>
+      <div class="cmd-name" data-i18n="cmd_guard_name">Garde Position</div>
+      <div class="cmd-desc" data-i18n="cmd_guard_desc">Surveille ton levier et tes positions en continu. Te réveille à 3h du matin si tu approches la liquidation.</div>
+      <div class="free-tag" data-i18n="cmd_guard_tag">API BINANCE PUBLIQUE</div>
     </div>
     <div class="cmd-card" onclick="switchTabAndDemo('explain')">
       <div class="cmd-tag">📚 <span>/explain</span></div>
-      <div class="cmd-name">Crypto Educator</div>
-      <div class="cmd-desc">Explique n'importe quel concept crypto en langage clair, avec une analogie du quotidien et un exemple Binance concret.</div>
-      <div class="free-tag">POUR TOUS LES NIVEAUX</div>
+      <div class="cmd-name" data-i18n="cmd_explain_name">Crypto Educator</div>
+      <div class="cmd-desc" data-i18n="cmd_explain_desc">Explique n'importe quel concept crypto en langage clair, avec une analogie du quotidien et un exemple Binance concret.</div>
+      <div class="free-tag" data-i18n="cmd_explain_tag">POUR TOUS LES NIVEAUX</div>
     </div>
     <div class="cmd-card" onclick="switchTabAndDemo('tax')">
       <div class="cmd-tag">💰 <span>/tax</span></div>
-      <div class="cmd-name">Rapport Fiscal P&L</div>
-      <div class="cmd-desc">Génère ton bilan annuel depuis l'historique Binance. Gains, pertes, CSV prêt pour ton comptable en quelques secondes.</div>
-      <div class="free-tag">CLÉ API LECTURE SEULE</div>
+      <div class="cmd-name" data-i18n="cmd_tax_name">Rapport Fiscal P&L</div>
+      <div class="cmd-desc" data-i18n="cmd_tax_desc">Génère ton bilan annuel depuis l'historique Binance. Gains, pertes, CSV prêt pour ton comptable en quelques secondes.</div>
+      <div class="free-tag" data-i18n="cmd_tax_tag">CLÉ API LECTURE SEULE</div>
     </div>
   </div>
 </section>
 
 <!-- COST -->
 <section class="section" style="background:var(--s1);border-top:1px solid var(--border)">
-  <div class="section-label">// Budget</div>
-  <h2 class="section-title">Coût total : <span class="acc">Zéro.</span></h2>
-  <p class="section-sub">Tout repose sur des APIs gratuites et du logiciel open-source. La seule dépense est quelques centimes de BNB pour déployer sur testnet — qu'on obtient gratuitement via faucet.</p>
+  <div class="section-label" data-i18n="sec_budget_label">// Budget</div>
+  <h2 class="section-title"><span data-i18n="sec_budget_title">Coût total :</span> <span class="acc" data-i18n="sec_budget_acc">Zéro.</span></h2>
+  <p class="section-sub" data-i18n="sec_budget_sub">Tout repose sur des APIs gratuites et du logiciel open-source. La seule dépense est quelques centimes de BNB pour déployer sur testnet — qu'on obtient gratuitement via faucet.</p>
 
   <div class="cost-table">
     <div class="cost-row">
-      <span class="cost-item">OpenClaw (agent local)</span>
-      <span class="cost-val">GRATUIT · Open Source</span>
+      <span class="cost-item" data-i18n="cost_agent">OpenClaw (agent local)</span>
+      <span class="cost-val" data-i18n="cost_agent_val">GRATUIT · Open Source</span>
     </div>
     <div class="cost-row">
-      <span class="cost-item">BSCScan API (audits)</span>
-      <span class="cost-val">GRATUIT · 5 req/sec</span>
+      <span class="cost-item" data-i18n="cost_bscscan">BSCScan API (audits)</span>
+      <span class="cost-val" data-i18n="cost_bscscan_val">GRATUIT · 5 req/sec</span>
     </div>
     <div class="cost-row">
-      <span class="cost-item">Binance P2P API publique</span>
-      <span class="cost-val">GRATUIT · Sans auth</span>
+      <span class="cost-item" data-i18n="cost_p2p">Binance P2P API publique</span>
+      <span class="cost-val" data-i18n="cost_p2p_val">GRATUIT · Sans auth</span>
     </div>
     <div class="cost-row">
-      <span class="cost-item">Binance Market Data API</span>
-      <span class="cost-val">GRATUIT · Sans auth</span>
+      <span class="cost-item" data-i18n="cost_market">Binance Market Data API</span>
+      <span class="cost-val" data-i18n="cost_market_val">GRATUIT · Sans auth</span>
     </div>
     <div class="cost-row">
-      <span class="cost-item">BNB Testnet (faucet.bnbchain.org)</span>
-      <span class="cost-val">GRATUIT · 0.5 tBNB/jour</span>
+      <span class="cost-item" data-i18n="cost_faucet">BNB Testnet (faucet.bnbchain.org)</span>
+      <span class="cost-val" data-i18n="cost_faucet_val">GRATUIT · 0.5 tBNB/jour</span>
     </div>
     <div class="cost-row">
-      <span class="cost-item">Déploiement NFA sur testnet</span>
+      <span class="cost-item" data-i18n="cost_deploy">Déploiement NFA sur testnet</span>
       <span class="cost-val">~0.002 tBNB ≈ $0.001</span>
     </div>
     <div class="cost-row total">
-      <span class="cost-item" style="font-weight:700;color:var(--text)">TOTAL</span>
+      <span class="cost-item" style="font-weight:700;color:var(--text)" data-i18n="cost_total">TOTAL</span>
       <span class="cost-val" style="color:var(--green)">$0.00</span>
     </div>
   </div>
@@ -735,13 +778,13 @@ footer{
 
 <!-- OPENCLAW -->
 <section class="section">
-  <div class="section-label">// Stack</div>
-  <h2 class="section-title">Propulsé par <span class="acc">OpenClaw</span></h2>
+  <div class="section-label" data-i18n="sec_stack_label">// Stack</div>
+  <h2 class="section-title"><span data-i18n="sec_stack_title">Propulsé par</span> <span class="acc">OpenClaw</span></h2>
 
   <div class="openclaw-block">
     <div class="oc-left">
-      <div class="oc-title">Pourquoi OpenClaw est parfait pour ça</div>
-      <p class="oc-desc">
+      <div class="oc-title" data-i18n="oc_title">Pourquoi OpenClaw est parfait pour ça</div>
+      <p class="oc-desc" data-i18n="oc_desc">
         OpenClaw est un assistant IA personnel open-source qui tourne sur ta machine, se connecte à WhatsApp/Telegram/Discord, garde une mémoire persistante de tout ce que tu lui dis, et peut exécuter des tâches en arrière-plan en continu (heartbeats). C'est exactement l'infrastructure dont un NFA Protector a besoin.
         <br><br>
         Ton NFA est un "Skill" OpenClaw — un fichier Markdown avec des instructions et des scripts Python qui étend les capacités de l'agent. Il peut accéder aux APIs, appeler des scripts shell, interagir avec BNB Chain, et te contacter sur Telegram à n'importe quelle heure.
@@ -750,62 +793,242 @@ footer{
         <div class="icmd"><span class="p">$</span> npm i -g openclaw</div>
         <div class="icmd"><span class="p">$</span> clawhub install claw-nfa-protector</div>
         <div class="icmd"><span class="p">$</span> pip install web3 requests python-dotenv</div>
-        <div class="icmd"><span class="p">></span> "Déploie mon Protector NFA risque 20%"</div>
+        <div class="icmd" data-i18n="oc_exec_cmd"><span class="p">></span> "Déploie mon Protector NFA risque 20%"</div>
       </div>
     </div>
     <div class="oc-right">
       <div class="oc-logo">🦞</div>
       <div class="oc-name">OpenClaw</div>
-      <div class="oc-free">open-source · local · gratuit</div>
+      <div class="oc-free" data-i18n="oc_tags">open-source · local · gratuit</div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-left">CLAW NFA PROTECTOR · OPENCLAW × BINANCE BUILDER CHALLENGE · MARCH 2026</div>
-  <div class="footer-right">BNB Chain · BAP-578 · ERC-8004 · 100% Open Source</div>
+  <div class="footer-left" data-i18n="footer_left">CLAW NFA PROTECTOR · OPENCLAW × BINANCE BUILDER CHALLENGE · MARCH 2026</div>
+  <div class="footer-right" data-i18n="footer_right">BNB Chain · BAP-578 · ERC-8004 · 100% Open Source</div>
 </footer>
 
 <script>
+// ── I18N ──────────────────────────────────────────────────────
+const LANGS = {
+  fr: {
+    nav_title: "CLAW NFA PROTECTOR",
+    nav_badge: "BNB CHAIN · BAP-578 · ERC-8004",
+    hero_pill: "OPENCLAW SKILL · BNB CHAIN · 100% GRATUIT",
+    h1_line1: "Ton garde du corps",
+    h1_accent: "IA personnel",
+    h1_line2: "qui vit on-chain.",
+    hero_desc: "Un <strong>agent IA autonome</strong> déployé sur BNB Chain qui surveille 24h/7j tes tokens, tes positions et tes échanges P2P — et t'alerte <strong>avant</strong> que tu perdes de l'argent.<br><br>Pas un dashboard. Pas un bot. <strong>Un NFA vivant qui t'appartient.</strong>",
+    deploy_label: "// Démarrer en 3 commandes",
+    deploy_cmd_exec: "<span class=\"p\">></span> Déploie mon Protector NFA",
+    deploy_sub: "Tourne localement sur ta machine · Aucun serveur · Tes clés ne quittent jamais ton appareil",
+    stat_cost: "Coût total",
+    stat_testnet: "Déploiement testnet",
+    stat_audit: "Audit d'un token",
+    agent_status: "actif · NFA #42 en ligne",
+    onchain_badge: "⬡ ON-CHAIN",
+    tab_deploy: "🚀 Déployer",
+    tab_audit: "🔍 Audit Token",
+    tab_p2p: "🤝 P2P Shield",
+    tab_guard: "📡 Garde Position",
+    tab_explain: "📚 Expliquer",
+    sec_arch_label: "// Architecture",
+    sec_arch_title: "Comment ça",
+    sec_arch_acc: "fonctionne",
+    sec_arch_sub: "Contrairement aux bots réactifs, ton NFA est un agent autonome avec son propre wallet on-chain. Il agit en permanence — pas juste quand tu lui poses une question.",
+    flow1_title: "Tu parles à OpenClaw",
+    flow1_desc: "Via WhatsApp, Telegram ou Discord. En français ou anglais. \"Déploie mon Protector avec risque max 20%\"",
+    flow2_title: "Ton NFA se déploie",
+    flow2_desc: "OpenClaw déploie un smart contract BAP-578 sur BNB Chain. Ton NFA a son propre wallet. C'est à toi — comme un NFT vivant.",
+    flow3_title: "Il surveille en continu",
+    flow3_desc: "Toutes les 30 minutes, ton NFA scanne tes tokens, positions et vendeurs P2P. Si danger → il te réveille.",
+    flow4_title: "Tu restes aux commandes",
+    flow4_desc: "Ton NFA alerte et propose. Toi tu approuves. Il ne fait jamais rien sans ton accord. Ton argent reste entre tes mains.",
+    sec_powers_label: "// 5 super-pouvoirs",
+    sec_powers_title: "Tout ce que ton ",
+    sec_powers_acc: "NFA sait faire",
+    sec_powers_sub: "Clique sur une commande pour voir la démo en live →",
+    cmd_deploy_name: "Déployer ton NFA",
+    cmd_deploy_desc: "Crée ton agent personnel sur BNB Chain avec son wallet propre. Une fois déployé, il tourne 24/7 même si tu fermes l'app.",
+    cmd_deploy_tag: "TESTNET · ~0.002 tBNB",
+    cmd_audit_name: "Audit Smart Contract",
+    cmd_audit_desc: "Détecte rug pulls, honeypots, mint illimité, dumps du deployer — en 30 secondes sur n'importe quel token BSC.",
+    cmd_audit_tag: "API BSCSCAN GRATUITE",
+    cmd_p2p_name: "P2P Shield",
+    cmd_p2p_desc: "Scanne un vendeur Binance P2P avant que tu envoies un centime. Taux de complétion, historique, patterns de scam.",
+    cmd_p2p_tag: "API P2P PUBLIQUE",
+    cmd_guard_name: "Garde Position",
+    cmd_guard_desc: "Surveille ton levier et tes positions en continu. Te réveille à 3h du matin si tu approches la liquidation.",
+    cmd_guard_tag: "API BINANCE PUBLIQUE",
+    cmd_explain_name: "Crypto Educator",
+    cmd_explain_desc: "Explique n'importe quel concept crypto en langage clair, avec une analogie du quotidien et un exemple Binance concret.",
+    cmd_explain_tag: "POUR TOUS LES NIVEAUX",
+    cmd_tax_name: "Rapport Fiscal P&L",
+    cmd_tax_desc: "Génère ton bilan annuel depuis l'historique Binance. Gains, pertes, CSV prêt pour ton comptable en quelques secondes.",
+    cmd_tax_tag: "CLÉ API LECTURE SEULE",
+    sec_budget_label: "// Budget",
+    sec_budget_title: "Coût total :",
+    sec_budget_acc: "Zéro.",
+    sec_budget_sub: "Tout repose sur des APIs gratuites et du logiciel open-source. La seule dépense est quelques centimes de BNB pour déployer sur testnet — qu'on obtient gratuitement via faucet.",
+    cost_agent: "OpenClaw (agent local)",
+    cost_agent_val: "GRATUIT · Open Source",
+    cost_bscscan: "BSCScan API (audits)",
+    cost_bscscan_val: "GRATUIT · 5 req/sec",
+    cost_p2p: "Binance P2P API publique",
+    cost_p2p_val: "GRATUIT · Sans auth",
+    cost_market: "Binance Market Data API",
+    cost_market_val: "GRATUIT · Sans auth",
+    cost_faucet: "BNB Testnet (faucet.bnbchain.org)",
+    cost_faucet_val: "GRATUIT · 0.5 tBNB/jour",
+    cost_deploy: "Déploiement NFA sur testnet",
+    cost_total: "TOTAL",
+    sec_stack_label: "// Stack",
+    sec_stack_title: "Propulsé par",
+    oc_title: "Pourquoi OpenClaw est parfait pour ça",
+    oc_desc: "OpenClaw est un assistant IA personnel open-source qui tourne sur ta machine, se connecte à WhatsApp/Telegram/Discord, garde une mémoire persistante de tout ce que tu lui dis, et peut exécuter des tâches en arrière-plan en continu (heartbeats). C'est exactement l'infrastructure dont un NFA Protector a besoin.<br><br>Ton NFA est un \"Skill\" OpenClaw — un fichier Markdown avec des instructions et des scripts Python qui étend les capacités de l'agent. Il peut accéder aux APIs, appeler des scripts shell, interagir avec BNB Chain, et te contacter sur Telegram à n'importe quelle heure.",
+    oc_exec_cmd: "<span class=\"p\">></span> \"Déploie mon Protector NFA risque 20%\"",
+    oc_tags: "open-source · local · gratuit",
+    footer_left: "CLAW NFA PROTECTOR · OPENCLAW × BINANCE BUILDER CHALLENGE · MARS 2026",
+    footer_right: "BNB Chain · BAP-578 · ERC-8004 · 100% Open Source"
+  },
+  en: {
+    nav_title: "CLAW NFA PROTECTOR",
+    nav_badge: "BNB CHAIN · BAP-578 · ERC-8004",
+    hero_pill: "OPENCLAW SKILL · BNB CHAIN · 100% FREE",
+    h1_line1: "Your personal",
+    h1_accent: "AI bodyguard",
+    h1_line2: "living on-chain.",
+    hero_desc: "An <strong>autonomous AI agent</strong> deployed on BNB Chain that monitors your tokens, positions, and P2P trades 24/7 — and alerts you <strong>before</strong> you lose money.<br><br>Not a dashboard. Not a bot. <strong>A living NFA that belongs to you.</strong>",
+    deploy_label: "// Start in 3 commands",
+    deploy_cmd_exec: "<span class=\"p\">></span> Deploy my NFA Protector",
+    deploy_sub: "Runs locally on your machine · No server · Your keys never leave your device",
+    stat_cost: "Total Cost",
+    stat_testnet: "Testnet Deployment",
+    stat_audit: "Token Audit",
+    agent_status: "active · NFA #42 online",
+    onchain_badge: "⬡ ON-CHAIN",
+    tab_deploy: "🚀 Deploy",
+    tab_audit: "🔍 Audit Token",
+    tab_p2p: "🤝 P2P Shield",
+    tab_guard: "📡 Position Guard",
+    tab_explain: "📚 Explain",
+    sec_arch_label: "// Architecture",
+    sec_arch_title: "How it",
+    sec_arch_acc: "works",
+    sec_arch_sub: "Unlike reactive bots, your NFA is an autonomous agent with its own on-chain wallet. It acts continuously — not just when you ask a question.",
+    flow1_title: "Talk to OpenClaw",
+    flow1_desc: "Via WhatsApp, Telegram or Discord. In French or English. \"Deploy my Protector with max risk 20%\"",
+    flow2_title: "Your NFA deploys",
+    flow2_desc: "OpenClaw deploys a BAP-578 smart contract on BNB Chain. Your NFA has its own wallet. It's yours — like a living NFT.",
+    flow3_title: "Continuous Monitoring",
+    flow3_desc: "Every 30 minutes, your NFA scans your tokens, positions, and P2P sellers. If danger is detected → it wakes you up.",
+    flow4_title: "You stay in control",
+    flow4_desc: "Your NFA alerts and proposes. You approve. It never acts without your consent. Your money stays in your hands.",
+    sec_powers_label: "// 5 super-powers",
+    sec_powers_title: "Everything your ",
+    sec_powers_acc: "NFA can do",
+    sec_powers_sub: "Click a command to see the live demo →",
+    cmd_deploy_name: "Deploy your NFA",
+    cmd_deploy_desc: "Creates your personal agent on BNB Chain with its own wallet. Once deployed, it runs 24/7 even if you close the app.",
+    cmd_deploy_tag: "TESTNET · ~0.002 tBNB",
+    cmd_audit_name: "Audit Smart Contract",
+    cmd_audit_desc: "Detect rug pulls, honeypots, unlimited minting, developer dumps — in 30 seconds on any BSC token.",
+    cmd_audit_tag: "FREE BSCSCAN API",
+    cmd_p2p_name: "P2P Shield",
+    cmd_p2p_desc: "Scan a Binance P2P seller before you send a cent. Completion rate, history, scam patterns.",
+    cmd_p2p_tag: "PUBLIC P2P API",
+    cmd_guard_name: "Position Guard",
+    cmd_guard_desc: "Monitor your leverage and positions continuously. Wake you up at 3 AM if you approach liquidation.",
+    cmd_guard_tag: "PUBLIC BINANCE API",
+    cmd_explain_name: "Crypto Educator",
+    cmd_explain_desc: "Explains any crypto concept in plain language, with an everyday analogy and a concrete Binance example.",
+    cmd_explain_tag: "FOR ALL LEVELS",
+    cmd_tax_name: "Fiscal P&L Report",
+    cmd_tax_desc: "Generate your annual report from Binance history. Gains, losses, CSV ready for your accountant in seconds.",
+    cmd_tax_tag: "READ-ONLY API KEY",
+    sec_budget_label: "// Budget",
+    sec_budget_title: "Total Cost:",
+    sec_budget_acc: "Zero.",
+    sec_budget_sub: "Everything relies on free APIs and open-source software. The only expense is a few cents of BNB to deploy on testnet — obtained for free via faucet.",
+    cost_agent: "OpenClaw (local agent)",
+    cost_agent_val: "FREE · Open Source",
+    cost_bscscan: "BSCScan API (audits)",
+    cost_bscscan_val: "FREE · 5 req/sec",
+    cost_p2p: "Binance P2P Public API",
+    cost_p2p_val: "FREE · No auth",
+    cost_market: "Binance Market Data API",
+    cost_market_val: "FREE · No auth",
+    cost_faucet: "BNB Testnet (faucet.bnbchain.org)",
+    cost_faucet_val: "FREE · 0.5 tBNB/day",
+    cost_deploy: "NFA Testnet Deployment",
+    cost_total: "TOTAL",
+    sec_stack_label: "// Stack",
+    sec_stack_title: "Powered by",
+    oc_title: "Why OpenClaw is perfect for this",
+    oc_desc: "OpenClaw is an open-source personal AI assistant that runs on your machine, connects to WhatsApp/Telegram/Discord, keeps a persistent memory of everything you say, and can execute background tasks continuously (heartbeats). It's exactly the infrastructure an NFA Protector needs.<br><br>Your NFA is an OpenClaw \"Skill\" — a Markdown file with instructions and Python scripts that extend the agent's capabilities. It can access APIs, call shell scripts, interact with BNB Chain, and contact you on Telegram at any time.",
+    oc_exec_cmd: "<span class=\"p\">></span> \"Deploy my NFA Protector risk 20%\"",
+    oc_tags: "open-source · local · free",
+    footer_left: "CLAW NFA PROTECTOR · OPENCLAW × BINANCE BUILDER CHALLENGE · MARCH 2026",
+    footer_right: "BNB Chain · BAP-578 · ERC-8004 · 100% Open Source"
+  }
+};
+
+let currentLang = 'fr';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('l' + lang).classList.add('active');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (LANGS[lang][key]) {
+      el.innerHTML = LANGS[lang][key];
+    }
+  });
+  // Update placeholder
+  document.getElementById('ci').placeholder = (lang === 'fr' ? "Tape une commande..." : "Type a command...");
+}
+
 // ── DEMO DATA ──────────────────────────────────────────────────
 const DEMOS = {
   deploy: {
-    msg: "Déploie mon Protector NFA avec risque max 20% et scan rugs sur BSC",
+    msg: { fr: "Déploie mon Protector NFA avec risque max 20% et scan rugs sur BSC", en: "Deploy my NFA Protector with max risk 20% and scan rugs on BSC" },
     reply: (c) => {
       c.className = "bubble bot rich";
+      const isFR = currentLang === 'fr';
       c.innerHTML = `<div class="audit-card">
-<div class="card-title">🚀 Déploiement NFA en cours...</div>
+<div class="card-title">${isFR ? '🚀 Déploiement NFA en cours...' : '🚀 NFA Deployment in progress...'}</div>
 <div style="margin:10px 0">
 <div class="deploy-animation" id="da">
-  <div class="deploy-step" style="animation-delay:0.1s"><div class="spin"></div> Génération du wallet NFA...</div>
-  <div class="deploy-step" style="animation-delay:0.9s"><div class="spin"></div> Compilation NFAProtector.sol...</div>
-  <div class="deploy-step" style="animation-delay:1.7s"><div class="spin"></div> Déploiement sur BNB Testnet...</div>
+  <div class="deploy-step" style="animation-delay:0.1s"><div class="spin"></div> ${isFR ? 'Génération du wallet NFA...' : 'Generating NFA wallet...'}</div>
+  <div class="deploy-step" style="animation-delay:0.9s"><div class="spin"></div> ${isFR ? 'Compilation NFAProtector.sol...' : 'Compiling NFAProtector.sol...'}</div>
+  <div class="deploy-step" style="animation-delay:1.7s"><div class="spin"></div> ${isFR ? 'Déploiement sur BNB Testnet...' : 'Deploying on BNB Testnet...'}</div>
 </div>
 </div></div>`;
       // After delay, show success
       setTimeout(() => {
         c.innerHTML = `<div class="audit-card">
-<div class="card-title">🛡️ NFA DÉPLOYÉ — <span style="color:var(--green)">SUCCÈS</span></div>
+<div class="card-title">🛡️ ${isFR ? 'NFA DÉPLOYÉ — <span style="color:var(--green)">SUCCÈS</span>' : 'NFA DEPLOYED — <span style="color:var(--green)">SUCCESS</span>'}</div>
 <div style="margin:8px 0;font-size:0.68rem;color:var(--muted)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
-Nom: <span style="color:#fff">Mon Protecteur BSC</span>
+${isFR ? 'Nom' : 'Name'}: <span style="color:#fff">${isFR ? 'Mon Protecteur BSC' : 'My BSC Protector'}</span>
 Token ID: <span style="color:var(--green)">#42</span>
 Wallet NFA: <span style="color:var(--amber)">0x7f3a...9b2c</span>
-Réseau: BNB Chain Testnet
-Tolérance risque: 20/100
+${isFR ? 'Réseau' : 'Network'}: BNB Chain Testnet
+${isFR ? 'Tolérance risque' : 'Risk tolerance'}: 20/100
 
-<div class="chain-badge">⬡ TX: 0x4f2a...8e91 · CONFIRMÉ</div>
+<div class="chain-badge">⬡ TX: 0x4f2a...8e91 · ${isFR ? 'CONFIRMÉ' : 'CONFIRMED'}</div>
 
 <div style="margin-top:10px;color:var(--text)">
-Ton NFA est <strong>vivant on-chain.</strong>
-Il va maintenant surveiller en continu.
+${isFR ? 'Ton NFA est <strong>vivant on-chain.</strong><br>Il va maintenant surveiller en continu.' : 'Your NFA is <strong>live on-chain.</strong><br>It will now monitor continuously.'}
+<br><br>
+→ /guard BTC ${isFR ? 'pour surveiller une position' : 'to monitor a position'}
+→ /audit 0x... ${isFR ? 'pour analyser un token' : 'to analyze a token'}
+→ /p2p user ${isFR ? 'pour vérifier un vendeur' : 'to verify a seller'}</div>
 
-→ /guard BTC pour surveiller une position
-→ /audit 0x... pour analyser un token
-→ /p2p user pour vérifier un vendeur</div>
-
-<div class="v-box v-safe" style="margin-top:8px">✅ Actif · Surveille toutes les 30 min</div>
+<div class="v-box v-safe" style="margin-top:8px">✅ ${isFR ? 'Actif · Surveille toutes les 30 min' : 'Active · Monitoring every 30 mins'}</div>
 </div>`;
       }, 3200);
     }
@@ -815,7 +1038,8 @@ Il va maintenant surveiller en continu.
     msg: "/audit 0x4e15361fd6b4bb609fa63c81a2be19d873717870",
     reply: (c) => {
       c.className = "bubble bot";
-      c.innerHTML = `⏳ Analyse du contrat en cours...\n\nConnexion BSCScan...\nLecture du code source...\nAnalyse des patterns...`;
+      const isFR = currentLang === 'fr';
+      c.innerHTML = isFR ? `⏳ Analyse du contrat en cours...\n\nConnexion BSCScan...\nLecture du code source...\nAnalyse des patterns...` : `⏳ Contract analysis in progress...\n\nConnecting BSCScan...\nReading source code...\nAnalyzing patterns...`;
       setTimeout(() => {
         c.className = "bubble bot rich";
         c.innerHTML = `<div class="audit-card">
@@ -824,22 +1048,22 @@ Il va maintenant surveiller en continu.
 <div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
 <div class="score-wrap">
-SCORE DE RISQUE: <span style="color:var(--red);font-weight:700">17</span>/22
+${isFR ? 'SCORE DE RISQUE' : 'RISK SCORE'}: <span style="color:var(--red);font-weight:700">17</span>/22
 <div class="score-track"><div class="score-fill" id="sf" style="width:0%;background:var(--red)"></div></div>
 </div>
 
-<div class="risk-row"><span>🔴</span><span>mint() illimité — l'owner peut créer des tokens infiniment</span></div>
-<div class="risk-row"><span>🔴</span><span>Vente bloquée pour non-whitelistés (honeypot)</span></div>
-<div class="risk-row"><span>🔴</span><span>Deployer a vendu 89% de ses tokens il y a 6h</span></div>
-<div class="risk-row"><span>🟠</span><span>Top 3 wallets = 71% du supply</span></div>
-<div class="risk-row"><span>🟠</span><span>Contrat déployé il y a seulement 3 jours</span></div>
-<div class="risk-row"><span>🟢</span><span>Source code vérifié sur BSCScan</span></div>
+<div class="risk-row"><span>🔴</span><span>${isFR ? 'mint() illimité — l\'owner peut créer des tokens infiniment' : 'Unlimited mint() — owner can create infinite tokens'}</span></div>
+<div class="risk-row"><span>🔴</span><span>${isFR ? 'Vente bloquée pour non-whitelistés (honeypot)' : 'Taxed/Blocked sell for non-whitelisted (honeypot)'}</span></div>
+<div class="risk-row"><span>🔴</span><span>${isFR ? 'Deployer a vendu 89% de ses tokens il y a 6h' : 'Deployer sold 89% of tokens 6h ago'}</span></div>
+<div class="risk-row"><span>🟠</span><span>${isFR ? 'Top 3 wallets = 71% du supply' : 'Top 3 wallets = 71% of supply'}</span></div>
+<div class="risk-row"><span>🟠</span><span>${isFR ? 'Contrat déployé il y a seulement 3 jours' : 'Contract deployed only 3 days ago'}</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Source code vérifié sur BSCScan' : 'Source code verified on BSCScan'}</span></div>
 
-<div class="v-box v-danger">⛔ VERDICT : DANGER — NE PAS ACHETER</div>
+<div class="v-box v-danger">⛔ ${isFR ? 'VERDICT : DANGER — NE PAS ACHETER' : 'VERDICT: DANGER — DO NOT BUY'}</div>
 
-Pattern classique de rug pull. Le deployer a déjà quitté. Tu peux acheter mais tu ne peux pas vendre.
+${isFR ? 'Pattern classique de rug pull. Le deployer a déjà quitté. Tu peux acheter mais tu ne peux pas vendre.' : 'Classic rug pull pattern. Deployer has already left. You can buy but you cannot sell.'}
 
-<div style="margin-top:8px;font-size:0.65rem;color:var(--muted)">⚠️ Ceci n'est pas un conseil financier.</div>
+<div style="margin-top:8px;font-size:0.65rem;color:var(--muted)">⚠️ ${isFR ? "Ceci n'est pas un conseil financier." : 'This is not financial advice.'}</div>
 </div>`;
         setTimeout(() => { const f = document.getElementById('sf'); if(f) f.style.width='77%'; }, 200);
       }, 1800);
@@ -850,22 +1074,23 @@ Pattern classique de rug pull. Le deployer a déjà quitté. Tu peux acheter mai
     msg: "/p2p binance_seller_2024 — Est-ce que je peux lui faire confiance ?",
     reply: (c) => {
       c.className = "bubble bot rich";
+      const isFR = currentLang === 'fr';
       c.innerHTML = `<div class="audit-card">
 <div class="card-title">🛡️ P2P SHIELD — @binance_seller_2024</div>
 <div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
-<div class="risk-row"><span>🟢</span><span>Ancienneté: <strong>847 jours</strong> — compte établi</span></div>
-<div class="risk-row"><span>🟢</span><span>Taux completion: <strong>98.7%</strong> — excellent</span></div>
-<div class="risk-row"><span>🟢</span><span>Total trades: <strong>1,204</strong> — très expérimenté</span></div>
-<div class="risk-row"><span>🟢</span><span>Feedback positif: <strong>99.1%</strong></span></div>
-<div class="risk-row"><span>🟢</span><span>Temps de release moyen: <strong>4 min</strong></span></div>
-<div class="risk-row"><span>🟠</span><span>Prix 1.4% au-dessus du marché — prime normale pour haute réputation</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Ancienneté' : 'Account Age'}: <strong>847 ${isFR ? 'jours' : 'days'}</strong> — ${isFR ? 'compte établi' : 'established account'}</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Taux completion' : 'Completion Rate'}: <strong>98.7%</strong> — ${isFR ? 'excellent' : 'excellent'}</span></div>
+<div class="risk-row"><span>🟢</span><span>Total trades: <strong>1,204</strong> — ${isFR ? 'très expérimenté' : 'highly experienced'}</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Feedback positif' : 'Positive feedback'}: <strong>99.1%</strong></span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Temps de release moyen' : 'Avg release time'}: <strong>4 min</strong></span></div>
+<div class="risk-row"><span>🟠</span><span>${isFR ? 'Prix 1.4% au-dessus du marché — prime normale pour haute réputation' : 'Price 1.4% above market — normal premium for high reputation'}</span></div>
 
 <div class="v-box v-safe">✅ VERDICT : SAFE TO TRADE</div>
 
-Vendeur de confiance avec un historique solide. La légère prime de prix est normale pour les vendeurs très bien notés.
+${isFR ? 'Vendeur de confiance avec un historique solide. La légère prime de prix est normale pour les vendeurs très bien notés.' : 'Trusted seller with a solid history. The slight price premium is normal for highly-rated sellers.'}
 
-<strong>Rappel :</strong> Ne libère JAMAIS les fonds avant confirmation dans ton compte bancaire.</div>`;
+<strong>${isFR ? 'Rappel' : 'Reminder'} :</strong> ${isFR ? 'Ne libère JAMAIS les fonds avant confirmation dans ton compte bancaire.' : 'NEVER release funds before confirmation in your bank account.'}</div>`;
     }
   },
 
@@ -873,26 +1098,27 @@ Vendeur de confiance avec un historique solide. La légère prime de prix est no
     msg: "/guard BTC — surveille ma position 10x levier",
     reply: (c) => {
       c.className = "bubble bot rich";
+      const isFR = currentLang === 'fr';
       c.innerHTML = `<div class="audit-card">
-<div class="card-title">📡 GARDE ACTIVE — BTC/USDT</div>
+<div class="card-title">📡 ${isFR ? 'GARDE ACTIVE' : 'GUARD ACTIVE'} — BTC/USDT</div>
 <div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
-Prix actuel: <span style="color:var(--green)">$83,241.50</span> (+2.14%)
-Volume 24h: $28.4 milliards
-Tendance: <span style="color:var(--green)">BULLISH ↑</span>
+${isFR ? 'Prix actuel' : 'Current price'}: <span style="color:var(--green)">$83,241.50</span> (+2.14%)
+Volume 24h: $28.4 ${isFR ? 'milliards' : 'billion'}
+${isFR ? 'Tendance' : 'Trend'}: <span style="color:var(--green)">BULLISH ↑</span>
 
-<div class="risk-row"><span>🟢</span><span>Prix au-dessus de la EMA 200 — tendance haussière confirmée</span></div>
-<div class="risk-row"><span>🟢</span><span>Volume en hausse — momentum validé</span></div>
-<div class="risk-row"><span>🟠</span><span>Grosse résistance sell à $84,500 — possible frein</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Prix au-dessus de la EMA 200 — tendance haussière confirmée' : 'Price above EMA 200 — uptrend confirmed'}</span></div>
+<div class="risk-row"><span>🟢</span><span>${isFR ? 'Volume en hausse — momentum validé' : 'Volume rising — momentum validated'}</span></div>
+<div class="risk-row"><span>🟠</span><span>${isFR ? 'Grosse résistance sell à $84,500 — possible frein' : 'Heavy sell resistance at $84,500 — possible pull back'}</span></div>
 
-<div class="v-box v-safe">📡 SURVEILLANCE ACTIVÉE</div>
+<div class="v-box v-safe">📡 ${isFR ? 'SURVEILLANCE ACTIVÉE' : 'MONITORING ACTIVATED'}</div>
 
-Je t'alerterai si :
-→ Prix sous $80,200 (support clé)
-→ Levier 10x → liquidation estimée à $75,480
-→ Volume anormal (dump whale potentiel)
+${isFR ? 'Je t\'alerterai si :' : 'I will alert you if:'}
+→ ${isFR ? 'Prix sous $80,200 (support clé)' : 'Price below $80,200 (key support)'}
+→ ${isFR ? 'Levier 10x → liquidation estimée à $75,480' : '10x leverage → estimated liquidation at $75,480'}
+→ ${isFR ? 'Volume anormal (dump whale potentiel)' : 'Abnormal volume (potential whale dump)'}
 
-<span style="color:var(--muted);font-size:0.65rem">Tu ne rateras rien même si tu dors.</span></div>`;
+<span style="color:var(--muted);font-size:0.65rem">${isFR ? 'Tu ne rateras rien même si tu dors.' : 'You won\'t miss a thing even while sleeping.'}</span></div>`;
     }
   },
 
@@ -900,27 +1126,28 @@ Je t'alerterai si :
     msg: "/explain liquidation — je comprends pas trop",
     reply: (c) => {
       c.className = "bubble bot rich";
+      const isFR = currentLang === 'fr';
       c.innerHTML = `<div class="audit-card">
-<div class="card-title">📚 LIQUIDATION — en clair</div>
+<div class="card-title">📚 LIQUIDATION — ${isFR ? 'en clair' : 'explained'}</div>
 <div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
-<strong>C'est quoi :</strong>
-Quand ton trade à levier perd tellement que Binance ferme ta position de force pour protéger le prêt.
+<strong>${isFR ? 'C\'est quoi :' : 'What is it:'}</strong>
+${isFR ? 'Quand ton trade à levier perd tellement que Binance ferme ta position de force pour protéger le prêt.' : 'When your leveraged trade loses so much that Binance forcibly closes your position to protect the loan.'}
 
-<strong>Analogie du quotidien :</strong>
-Tu empruntes 900€ pour acheter une montre à 1000€. Si la montre chute à 100€, le prêteur reprend la montre avant qu'elle vaille moins que ta dette.
+<strong>${isFR ? 'Analogie du quotidien :' : 'Everyday analogy:'}</strong>
+${isFR ? 'Tu empruntes 900€ pour acheter une montre à 1000€. Si la montre chute à 100€, le prêteur reprend la montre avant qu\'elle vaille moins que ta dette.' : 'You borrow $900 to buy a $1000 watch. If the watch drops to $100, the lender takes the watch back before it\'s worth less than your debt.'}
 
-<strong>Sur Binance concrètement :</strong>
-→ Tu ouvres un LONG BTC 10x avec 1000 USDT
-→ Prix d'entrée: $80,000
-→ Prix de liquidation: ~$72,800
-→ BTC tombe à $72,800
-→ Binance ferme automatiquement
-→ Tu perds tes 1000 USDT
+<strong>${isFR ? 'Sur Binance concrètement :' : 'On Binance concretely:'}</strong>
+→ ${isFR ? 'Tu ouvres un LONG BTC 10x avec 1000 USDT' : 'You open a 10x BTC LONG with 1000 USDT'}
+→ ${isFR ? 'Prix d\'entrée' : 'Entry price'}: $80,000
+→ ${isFR ? 'Prix de liquidation' : 'Liquidation price'}: ~$72,800
+→ BTC ${isFR ? 'tombe à' : 'falls to'} $72,800
+→ Binance ${isFR ? 'ferme automatiquement' : 'closes automatically'}
+→ ${isFR ? 'Tu perds tes 1000 USDT' : 'You lose your 1000 USDT'}
 
-<div class="v-box v-warn">💡 CONSEIL PRATIQUE</div>
+<div class="v-box v-warn">💡 ${isFR ? 'CONSEIL PRATIQUE' : 'PRO TIP'}</div>
 
-Vérifie TOUJOURS ton prix de liquidation avant d'ouvrir une position. Il est affiché dans le panneau de confirmation Futures. Ne jamais utiliser plus de 2x si tu dors plus de 4h consécutives.</div>`;
+${isFR ? 'Vérifie TOUJOURS ton prix de liquidation avant d\'ouvrir une position. Il est affiché dans le panneau de confirmation Futures. Ne jamais utiliser plus de 2x si tu dors plus de 4h consécutives.' : 'ALWAYS check your liquidation price before opening a position. It\'s shown in the Futures confirmation panel. Never use more than 2x if you sleep for more than 4 consecutive hours.'}</div>`;
     }
   },
 
@@ -928,26 +1155,27 @@ Vérifie TOUJOURS ton prix de liquidation avant d'ouvrir une position. Il est af
     msg: "/tax 2025 — génère mon rapport pour le comptable",
     reply: (c) => {
       c.className = "bubble bot rich";
+      const isFR = currentLang === 'fr';
       c.innerHTML = `<div class="audit-card">
-<div class="card-title">📊 RAPPORT FISCAL 2025</div>
+<div class="card-title">📊 ${isFR ? 'RAPPORT FISCAL 2025' : '2025 TAX REPORT'}</div>
 <div style="margin:8px 0;color:var(--faint)">━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
-Gains réalisés: <span style="color:var(--green)">+14,832.40 USDT</span>
-Pertes réalisées: <span style="color:var(--red)">-3,210.00 USDT</span>
-<strong>RÉSULTAT NET: <span style="color:var(--green)">+11,622.40 USDT</span></strong>
+${isFR ? 'Gains réalisés' : 'Realized gains'}: <span style="color:var(--green)">+14,832.40 USDT</span>
+${isFR ? 'Pertes réalisées' : 'Realized losses'}: <span style="color:var(--red)">-3,210.00 USDT</span>
+<strong>${isFR ? 'RÉSULTAT NET' : 'NET RESULT'}: <span style="color:var(--green)">+11,622.40 USDT</span></strong>
 
-MEILLEURS TRADES:
+${isFR ? 'MEILLEURS TRADES' : 'TOP TRADES'}:
 <div class="risk-row"><span>✅</span><span>BTC: +8,240 USDT (+61%)</span></div>
 <div class="risk-row"><span>✅</span><span>SOL: +4,120 USDT (+142%)</span></div>
 <div class="risk-row"><span>✅</span><span>BNB: +2,472 USDT (+28%)</span></div>
 
-PERTES À DÉCLARER:
+${isFR ? 'PERTES À DÉCLARER' : 'REPORTABLE LOSSES'}:
 <div class="risk-row"><span>🔴</span><span>ALTX: -3,210 USDT (-98%)</span></div>
 
-Total transactions: 847 · Paires: 23
+Total transactions: 847 · ${isFR ? 'Paires' : 'Pairs'}: 23
 
-<div class="v-box v-warn">📄 chainguard-tax-2025.csv sauvegardé</div>
-Consulte un comptable pour les règles fiscales de ton pays.</div>`;
+<div class="v-box v-warn">📄 chainguard-tax-2025.csv ${isFR ? 'sauvegardé' : 'saved'}</div>
+${isFR ? 'Consulte un comptable pour les règles fiscales de ton pays.' : 'Consult an accountant for your country\'s tax rules.'}</div>`;
     }
   }
 };
@@ -958,20 +1186,20 @@ let currentTab = 'deploy';
 
 function switchTab(el, key) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+  if (el) el.classList.add('active');
+  else {
+    const tabs = document.querySelectorAll('.tab');
+    const map = ['deploy','audit','p2p','guard','explain','tax'];
+    const idx = map.indexOf(key);
+    if (idx !== -1) tabs[idx].classList.add('active');
+  }
   currentTab = key;
 }
 
 function switchTabAndDemo(key) {
-  const tabs = document.querySelectorAll('.tab');
-  const map = ['deploy','audit','p2p','guard','explain','tax'];
-  tabs.forEach((t,i) => {
-    if (map[i] === key) { t.classList.add('active'); }
-    else { t.classList.remove('active'); }
-  });
-  currentTab = key;
-  // scroll to chat
-  document.getElementById('ci').value = DEMOS[key]?.msg || '';
+  switchTab(null, key);
+  const msgObj = DEMOS[key]?.msg;
+  document.getElementById('ci').value = (typeof msgObj === 'string' ? msgObj : msgObj[currentLang]) || '';
   setTimeout(() => send(), 100);
 }
 
@@ -1001,7 +1229,7 @@ function send() {
       document.getElementById('msgs').appendChild(row);
       demo.reply(c);
     } else {
-      addBot("Essaie /audit, /p2p, /guard, /tax ou /explain avec une vraie valeur !");
+      addBot(currentLang === 'fr' ? "Essaie /audit, /p2p, /guard, /tax ou /explain avec une vraie valeur !" : "Try /audit, /p2p, /guard, /tax or /explain with a real value!");
     }
     scroll();
     busy = false;
@@ -1049,14 +1277,15 @@ function addTyping() {
 
 function scroll() {
   const msgs = document.getElementById('msgs');
-  setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 60);
+  if (msgs) setTimeout(() => msgs.scrollTop = msgs.scrollHeight, 60);
 }
 
 function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // Kick off deploy demo on load
 setTimeout(() => {
-  document.getElementById('ci').value = DEMOS.deploy.msg;
+  const msgObj = DEMOS.deploy.msg;
+  document.getElementById('ci').value = (typeof msgObj === 'string' ? msgObj : msgObj[currentLang]);
   setTimeout(send, 300);
 }, 900);
 </script>
