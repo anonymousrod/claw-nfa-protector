@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAW NFA PROTECTOR — Guide Complet</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --green: #00c896;
+            --green-light: #e6fff8;
+            --green-dim: rgba(0, 200, 150, 0.1);
+            --amber: #f59e0b;
+            --amber-light: #fffbeb;
+            --red: #ef4444;
+            --red-light: #fef2f2;
+            --blue: #3b82f6;
+            --blue-light: #eff6ff;
+            --dark: #0f172a;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --white: #ffffff;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        /* ── PRINT ── */
+        @media print {
+            body {
+                background: white;
+                font-size: 12px;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+            .page-break {
+                page-break-before: always;
+            }
+
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* ── COVER ── */
+        .cover {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f2a1a 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 200, 150, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .cover-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 200, 150, 0.15);
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            color: #00c896;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .cover h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .cover h1 span {
+            color: #00c896;
+        }
+
+        .cover-subtitle {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin-bottom: 32px;
+            font-weight: 400;
+            max-width: 600px;
+        }
+
+        .cover-stats {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .cover-stat {
+            border-left: 2px solid rgba(0, 200, 150, 0.4);
+            padding-left: 16px;
+        }
+
+        .cover-stat-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #00c896;
+            line-height: 1;
+        }
+
+        .cover-stat-lbl {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 3px;
+            letter-spacing: 0.05em;
+        }
+
+        /* ── TOC ── */
+        .toc {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .toc-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 32px;
+        }
+
+        .toc-list li a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.15s;
+        }
+
+        .toc-list li a:hover {
+            color: var(--green);
+        }
+
+        .toc-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--green);
+            min-width: 20px;
+        }
+
+        /* ── SECTIONS ── */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .section-num {
+            width: 32px;
+            height: 32px;
+            background: var(--dark);
+            color: var(--green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-500);
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--gray-700);
+            line-height: 1.7;
+            font-size: 0.92rem;
+        }
+
+        /* ── PROBLEM BOX ── */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .problem-card {
+            background: var(--red-light);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .problem-card .icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .problem-card .ptitle {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 6px;
+        }
+
+        .problem-card .pdesc {
+            font-size: 0.8rem;
+            color: #7f1d1d;
+            line-height: 1.5;
+        }
+
+        /* ── SOLUTION HIGHLIGHT ── */
+        .solution-highlight {
+            background: linear-gradient(135deg, var(--green-light), #f0fff8);
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            border-left: 4px solid var(--green);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+
+        .solution-highlight p {
+            font-size: 1rem;
+            color: #065f46;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        /* ── COMMANDS ── */
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .cmd-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cmd-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--green);
+        }
+
+        .cmd-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--green-dim);
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .cmd-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .cmd-desc {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .cmd-example {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-100);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .cmd-free {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--green);
+            background: var(--green-dim);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        /* ── HOW IT WORKS ── */
+        .flow {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            position: relative;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 14px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '→';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--green);
+            font-size: 1.2rem;
+            z-index: 1;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-num {
+            width: 28px;
+            height: 28px;
+            background: var(--dark);
+            color: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin: 0 auto 10px;
+        }
+
+        .flow-icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .flow-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .flow-desc {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            line-height: 1.4;
+        }
+
+        /* ── CONVERSATION DEMO ── */
+        .chat-demo {
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .chat-bar {
+            background: #0f172a;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-bar-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.4
+            }
+        }
+
+        .chat-bar-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.1em;
+        }
+
+        .chat-messages {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            line-height: 1.55;
+        }
+
+        .chat-msg.user {
+            background: rgba(0, 200, 150, 0.15);
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+            align-self: flex-end;
+            border-bottom-right-radius: 3px;
+        }
+
+        .chat-msg.bot {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.85);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            border-bottom-left-radius: 3px;
+            white-space: pre-wrap;
+        }
+
+        .chat-msg.bot strong {
+            color: var(--green);
+        }
+
+        /* ── COST TABLE ── */
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .cost-table th {
+            background: var(--dark);
+            color: var(--green);
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cost-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--gray-700);
+        }
+
+        .cost-table tr:last-child td {
+            background: var(--green-light);
+            font-weight: 700;
+            color: #065f46;
+            border-bottom: none;
+        }
+
+        .cost-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--green);
+            font-size: 0.82rem;
+        }
+
+        .cost-table tr:last-child .cost-val {
+            color: #065f46;
+            font-size: 1rem;
+        }
+
+        /* ── ADVANTAGES ── */
+        .adv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .adv-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .adv-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .adv-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .adv-desc {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            line-height: 1.5;
+        }
+
+        /* ── TECH STACK ── */
+        .tech-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .tech-row:last-child {
+            border-bottom: none;
+        }
+
+        .tech-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            width: 28px;
+            text-align: center;
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: var(--dark);
+            min-width: 160px;
+        }
+
+        .tech-desc {
+            color: var(--gray-500);
+            font-size: 0.82rem;
+        }
+
+        .tech-free {
+            margin-left: auto;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--green);
+            background: var(--green-dim);
+            padding: 2px 8px;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        /* ── COMPETITION ── */
+        .comp-box {
+            background: linear-gradient(135deg, #fffbeb, #fff7ed);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-left: 4px solid var(--amber);
+            border-radius: 10px;
+            padding: 20px 24px;
+        }
+
+        .comp-box p {
+            color: #78350f;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .comp-box strong {
+            color: #92400e;
+        }
+
+        /* ── INFO BOX ── */
+        .info-box {
+            background: var(--blue-light);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-left: 4px solid var(--blue);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 16px 0;
+            font-size: 0.85rem;
+            color: #1e40af;
+            line-height: 1.6;
+        }
+
+        /* ── LINKS ── */
+        .link-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+        }
+
+        .link-row:hover {
+            border-color: var(--green);
+        }
+
+        .link-icon {
+            font-size: 1.1rem;
+        }
+
+        .link-text {
+            flex: 1;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .link-url {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--green);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--gray-500);
+        }
+
+        /* ── PRINT BUTTON ── */
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--dark);
+            color: var(--green);
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            cursor: pointer;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+            z-index: 100;
+        }
+
+        .print-btn:hover {
+            background: var(--green);
+            color: var(--dark);
+        }
+
+        /* ── CHECK LIST ── */
+        .check-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .check-list li::before {
+            content: '✓';
+            color: var(--green);
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── TAG ── */
+        .tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .tag-green {
+            background: var(--green-dim);
+            color: #065f46;
+        }
+
+        .tag-amber {
+            background: var(--amber-light);
+            color: #78350f;
+        }
+
+        .tag-blue {
+            background: var(--blue-light);
+            color: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+
+    <div class="container">
+
+        <!-- COVER -->
+        <div class="cover">
+            <div class="cover-badge">
+                <span>🛡️</span> Guide Complet du Produit
+            </div>
+            <h1>CLAW NFA<br><span>PROTECTOR</span></h1>
+            <p class="cover-subtitle">Ton garde du corps IA personnel sur BNB Chain — qui protège chaque utilisateur
+                Binance 24h/7j, avant qu'il perde de l'argent.</p>
+            <div class="cover-stats">
+                <div class="cover-stat">
+                    <div class="cover-stat-val">$0</div>
+                    <div class="cover-stat-lbl">Coût total</div>
+                </div>
+                <div class="cover-stat">
+                    <div class="cover-stat-val">5</div>
+                    <div class="cover-stat-lbl">Super-pouvoirs</div>
+                </div>
+                <div class="cover-stat">
+                    <div class="cover-stat-val">30s</div>
+                    <div class="cover-stat-lbl">Pour auditer un token</div>
+                </div>
+                <div class="cover-stat">
+                    <div class="cover-stat-val">24/7</div>
+                    <div class="cover-stat-lbl">Surveillance continue</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOC -->
+        <div class="toc">
+            <div class="toc-title">Table des matières</div>
+            <ul class="toc-list">
+                <li><a href="#contexte"><span class="toc-num">01</span> Contexte & problème</a></li>
+                <li><a href="#solution"><span class="toc-num">02</span> La solution</a></li>
+                <li><a href="#fonctionnement"><span class="toc-num">03</span> Comment ça fonctionne</a></li>
+                <li><a href="#commandes"><span class="toc-num">04</span> Les 5 commandes</a></li>
+                <li><a href="#demos"><span class="toc-num">05</span> Exemples de conversation</a></li>
+                <li><a href="#avantages"><span class="toc-num">06</span> Avantages clés</a></li>
+                <li><a href="#cout"><span class="toc-num">07</span> Coût & stack technique</a></li>
+                <li><a href="#concours"><span class="toc-num">08</span> Contexte du concours</a></li>
+                <li><a href="#liens"><span class="toc-num">09</span> Liens & ressources</a></li>
+            </ul>
+        </div>
+
+        <!-- SECTION 1 : CONTEXTE -->
+        <div class="section" id="contexte">
+            <div class="section-header">
+                <div class="section-num">01</div>
+                <div class="section-title">Contexte & Problème</div>
+            </div>
+
+            <div class="card">
+                <p>Binance est la plus grande plateforme d'échange de cryptomonnaies au monde. Des millions de personnes
+                    y achètent, vendent et échangent des actifs numériques chaque jour. Pourtant, même en 2026,
+                    <strong>la majorité des utilisateurs perdent de l'argent non pas à cause du marché, mais à cause de
+                        la fraude, de la manipulation et du manque d'information au moment où ça compte.</strong></p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">💣</div>
+                    <div class="ptitle">Rug Pulls & Tokens Scam</div>
+                    <div class="pdesc">Des milliers de faux tokens sont créés chaque semaine sur BNB Chain. Les
+                        créateurs disparaissent avec l'argent des acheteurs. Il n'existait aucun outil gratuit et simple
+                        pour vérifier un contrat en 30 secondes.</div>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🤝</div>
+                    <div class="ptitle">Fraudes P2P</div>
+                    <div class="pdesc">Sur Binance P2P, des vendeurs malveillants prennent l'argent et disparaissent.
+                        Les utilisateurs n'ont aucun moyen simple de vérifier la fiabilité d'un vendeur avant d'envoyer
+                        leur argent.</div>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">😴</div>
+                    <div class="ptitle">Liquidations à 3h du matin</div>
+                    <div class="pdesc">Les positions à levier peuvent être liquidées à n'importe quelle heure. Sans
+                        surveillance continue, un utilisateur peut perdre tout son capital pendant son sommeil, sans
+                        aucune alerte.</div>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">😕</div>
+                    <div class="ptitle">Incompréhension totale</div>
+                    <div class="pdesc">La majorité des nouveaux utilisateurs ne comprennent pas les concepts de base :
+                        liquidation, levier, rug pull, DeFi. Ils agissent sans comprendre les risques réels de chaque
+                        action.</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                💡 <strong>Le problème central :</strong> tous les outils existants sont <em>réactifs</em>. Ils te
+                montrent ce qui s'est passé APRÈS que tu as perdu. CLAW NFA Protector est le premier outil qui
+                intervient <em>avant</em>.
+            </div>
+        </div>
+
+        <!-- SECTION 2 : SOLUTION -->
+        <div class="section" id="solution">
+            <div class="section-header">
+                <div class="section-num">02</div>
+                <div class="section-title">La Solution</div>
+            </div>
+
+            <div class="solution-highlight">
+                <p>🛡️ <strong>CLAW NFA Protector</strong> est un <strong>agent IA personnel</strong> déployé sur BNB
+                    Chain qui surveille ton compte Binance 24h/7j — directement depuis ton WhatsApp ou Telegram — et te
+                    protège avant que tu perdes de l'argent.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Ce que c'est exactement</div>
+                <p>C'est un <strong>skill</strong> (extension) pour <strong>OpenClaw</strong> — un assistant IA
+                    open-source qui tourne sur ton ordinateur et se connecte à tes applications de messagerie. Une fois
+                    installé, ton NFA Protector est un agent autonome qui tourne en arrière-plan, surveille les marchés,
+                    et t'envoie des alertes directement sur WhatsApp ou Telegram dès qu'il détecte un danger.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Ce qui le rend unique</div>
+                <ul class="check-list">
+                    <li>Ce n'est pas un dashboard — pas besoin d'ouvrir une application. Il vient te parler.</li>
+                    <li>Ce n'est pas un bot réactif — il agit en continu, même quand tu dors.</li>
+                    <li>C'est un <strong>NFA (Non-Fungible Agent)</strong> — un agent avec sa propre identité sur BNB
+                        Chain, selon le standard BAP-578 lancé en février 2026.</li>
+                    <li>Il utilise uniquement des APIs gratuites — aucun abonnement, aucun serveur, aucune dépense.</li>
+                    <li>Tes données restent sur ta machine — rien n'est envoyé à un serveur externe.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 3 : FONCTIONNEMENT -->
+        <div class="section" id="fonctionnement">
+            <div class="section-header">
+                <div class="section-num">03</div>
+                <div class="section-title">Comment ça fonctionne</div>
+            </div>
+
+            <div class="flow">
+                <div class="flow-step">
+                    <div class="flow-num">1</div>
+                    <div class="flow-icon">💬</div>
+                    <div class="flow-title">Tu parles</div>
+                    <div class="flow-desc">Via WhatsApp, Telegram ou Discord. En français ou en anglais. Langage
+                        naturel.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">2</div>
+                    <div class="flow-icon">🧠</div>
+                    <div class="flow-title">OpenClaw comprend</div>
+                    <div class="flow-desc">L'IA locale sur ton PC interprète ta demande et appelle le bon outil.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">3</div>
+                    <div class="flow-icon">🔍</div>
+                    <div class="flow-title">Le NFA analyse</div>
+                    <div class="flow-desc">Connexion aux APIs gratuites (BSCScan, Binance) pour obtenir les vraies
+                        données.</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">4</div>
+                    <div class="flow-icon">✅</div>
+                    <div class="flow-title">Tu décides</div>
+                    <div class="flow-desc">Le NFA te présente les résultats clairs. Toi seul approuves chaque action.
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box" style="margin-top:20px">
+                🔄 <strong>Surveillance automatique :</strong> Toutes les 30 minutes, le NFA vérifie silencieusement tes
+                positions et tokens surveillés. Il ne t'envoie un message que si quelque chose de dangereux est détecté.
+                Pas de spam — uniquement ce qui compte.
+            </div>
+        </div>
+
+        <!-- SECTION 4 : COMMANDES -->
+        <div class="section" id="commandes">
+            <div class="section-header">
+                <div class="section-num">04</div>
+                <div class="section-title">Les 5 Commandes</div>
+            </div>
+
+            <div class="cmd-grid">
+
+                <div class="cmd-card">
+                    <div class="cmd-tag">/audit</div>
+                    <div class="cmd-name">Audit de Smart Contract</div>
+                    <div class="cmd-desc">Analyse n'importe quel token BSC/BNB Chain en 30 secondes. Détecte les rug
+                        pulls, honeypots, mint illimité, dumps du deployer, et 7 autres patterns de fraude.</div>
+                    <div class="cmd-example">Tu : /audit 0x4e15361...
+                        NFA : ⛔ DANGER — Score 17/22
+                        🔴 mint() illimité
+                        🔴 Deployer a vendu 89%
+                        🔴 Vente bloquée (honeypot)</div>
+                    <div class="cmd-free">API BSCScan · Gratuit</div>
+                </div>
+
+                <div class="cmd-card">
+                    <div class="cmd-tag">/p2p</div>
+                    <div class="cmd-name">P2P Shield</div>
+                    <div class="cmd-desc">Vérifie un vendeur Binance P2P avant que tu envoies de l'argent. Analyse
+                        l'ancienneté du compte, le taux de complétion, l'historique de feedback et les patterns de scam.
+                    </div>
+                    <div class="cmd-example">Tu : /p2p crypto_seller_99
+                        NFA : ✅ SAFE — Score 0/10
+                        ✅ Compte actif 847 jours
+                        ✅ Completion rate 98.7%
+                        ✅ 1204 trades réussis</div>
+                    <div class="cmd-free">API P2P Publique · Gratuit</div>
+                </div>
+
+                <div class="cmd-card">
+                    <div class="cmd-tag">/guard</div>
+                    <div class="cmd-name">Garde de Position</div>
+                    <div class="cmd-desc">Surveille un token ou une position 24h/7j. Te réveille si le prix chute
+                        dangereusement, si une baleine vend massivement, ou si ta position à levier approche la
+                        liquidation.</div>
+                    <div class="cmd-example">Tu : /guard BTC
+                        NFA : 📡 Surveillance activée
+                        Prix : $83,241 (+2.1%)
+                        ⚠️ Résistance à $84,500
+                        → Alerte si < $80,200</div>
+                            <div class="cmd-free">API Binance Publique · Gratuit</div>
+                    </div>
+
+                    <div class="cmd-card">
+                        <div class="cmd-tag">/tax</div>
+                        <div class="cmd-name">Rapport Fiscal P&L</div>
+                        <div class="cmd-desc">Génère ton bilan annuel complet depuis l'historique Binance. Calcule tes
+                            gains, pertes, et produit un fichier CSV prêt pour ton comptable en quelques secondes.</div>
+                        <div class="cmd-example">Tu : /tax 2025
+                            NFA : 📊 Rapport 2025
+                            Gains : +$14,832
+                            Pertes : -$3,210
+                            Net : +$11,622
+                            → CSV sauvegardé</div>
+                        <div class="cmd-free">Clé API lecture seule · Gratuit</div>
+                    </div>
+
+                    <div class="cmd-card" style="grid-column: 1 / -1;">
+                        <div class="cmd-tag">/explain</div>
+                        <div class="cmd-name">Crypto Éducateur — Pour tous les niveaux</div>
+                        <div class="cmd-desc">Explique n'importe quel concept crypto en langage clair, avec une analogie
+                            du quotidien et un exemple concret sur Binance. Parfait pour les débutants comme pour les
+                            traders confirmés qui veulent clarifier un point précis. Disponible en français.</div>
+                        <div class="cmd-example">Tu : /explain liquidation
+                            NFA : En clair → Quand ton trade à levier perd trop,
+                            Binance ferme ta position automatiquement.
+                            Analogie : Tu empruntes 900€ pour acheter
+                            une montre à 1000€. Si elle vaut 100€,
+                            le prêteur reprend la montre.
+                            💡 Conseil : Vérifie toujours ton prix
+                            de liquidation avant d'ouvrir une position.</div>
+                        <div class="cmd-free">IA intégrée · Gratuit · Toutes langues</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SECTION 5 : DEMOS -->
+            <div class="section" id="demos">
+                <div class="section-header">
+                    <div class="section-num">05</div>
+                    <div class="section-title">Exemples de Conversation Réels</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Scénario 1 — Avant d'acheter un token</div>
+                    <div class="chat-demo">
+                        <div class="chat-bar">
+                            <div class="chat-bar-dot"></div>
+                            <div class="chat-bar-name">NFA PROTECTOR · ACTIF</div>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="chat-msg user">J'ai vu ce token MOONX qui monte vite, voici le contrat :
+                                0x4e15361fd6b4bb609fa63c81a2be19d873717870</div>
+                            <div class="chat-msg bot"><strong>🛡️ AUDIT NFA — MOONX (MX)</strong>
+                                ━━━━━━━━━━━━━━━━━━━━━━━
+                                SCORE DE RISQUE : <strong>17/22</strong>
+
+                                🔴 mint() illimité — l'owner peut créer des tokens à l'infini
+                                🔴 Vente bloquée pour non-whitelistés (honeypot)
+                                🔴 Le deployer a vendu 89% de ses tokens il y a 6h
+                                🟠 Top 3 wallets concentrent 71% du supply
+                                🟠 Contrat déployé il y a seulement 3 jours
+
+                                <strong>⛔ VERDICT : DANGER — NE PAS ACHETER</strong>
+
+                                Pattern classique de rug pull. Le deployer a déjà quitinvariance. Tu peux acheter mais
+                                tu ne pourras jamais vendre.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Scénario 2 — Surveillance de nuit</div>
+                    <div class="chat-demo">
+                        <div class="chat-bar">
+                            <div class="chat-bar-dot"></div>
+                            <div class="chat-bar-name">NFA PROTECTOR · ALERTE AUTOMATIQUE · 3H12</div>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="chat-msg bot"><strong>⚠️ ALERTE LIQUIDATION — ETH/USDT</strong>
+
+                                Ton levier 10x ETH approche du niveau critique.
+
+                                Prix actuel : $3,198 (-4.2% en 1h)
+                                Ton prix de liquidation : $3,150
+                                Distance restante : <strong>seulement 1.5%</strong>
+
+                                Un wallet de 8.4M$ vient de vendre sur Binance.
+
+                                <strong>Que veux-tu faire ?</strong>
+                                → Réponds "réduire" pour que je t'explique comment
+                                → Réponds "fermer" pour te guider vers la fermeture
+                                → Réponds "garder" pour ignorer cette alerte
+                            </div>
+                            <div class="chat-msg user">réduire</div>
+                            <div class="chat-msg bot">Pour réduire ta position maintenant :
+                                1. Va sur Binance Futures
+                                2. Clique sur ta position ETH/USDT
+                                3. "Reduce-only" → vends 50% de ta position
+                                4. Cela remonte ton prix de liquidation à ~$2,800
+
+                                <strong>Je continue la surveillance.</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Scénario 3 — Déploiement du NFA (une seule fois)</div>
+                    <div class="chat-demo">
+                        <div class="chat-bar">
+                            <div class="chat-bar-dot"></div>
+                            <div class="chat-bar-name">NFA PROTECTOR · SETUP</div>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="chat-msg user">Déploie mon Protector NFA avec risque max 20% et scan rugs sur
+                                BSC</div>
+                            <div class="chat-msg bot"><strong>🚀 NFA DÉPLOYÉ SUR BNB CHAIN</strong>
+                                ━━━━━━━━━━━━━━━━━━━━━━━
+                                Nom : Mon Protecteur BSC
+                                Token ID : #42
+                                Wallet NFA : 0x7f3a...9b2c
+                                Réseau : BNB Chain Testnet
+                                Tolérance risque : 20/100
+
+                                <strong>⬡ Transaction confirmée on-chain</strong>
+
+                                Ton NFA est maintenant <strong>vivant sur BNB Chain.</strong>
+                                Il va surveiller tes tokens et positions toutes les 30 min.
+
+                                → /guard BTC → surveiller BTC
+                                → /audit 0x... → auditer un token
+                                → /p2p user → vérifier un vendeur
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6 : AVANTAGES -->
+            <div class="section" id="avantages">
+                <div class="section-header">
+                    <div class="section-num">06</div>
+                    <div class="section-title">Avantages Clés</div>
+                </div>
+
+                <div class="adv-grid">
+                    <div class="adv-card">
+                        <div class="adv-icon">⚡</div>
+                        <div class="adv-title">Prévention en temps réel</div>
+                        <div class="adv-desc">Agit AVANT la perte, pas après. Le seul outil qui intervient au moment de
+                            la décision.</div>
+                    </div>
+                    <div class="adv-card">
+                        <div class="adv-icon">💬</div>
+                        <div class="adv-title">Zéro friction</div>
+                        <div class="adv-desc">Tu parles en français dans WhatsApp. Pas d'application à ouvrir, pas
+                            d'interface à apprendre.</div>
+                    </div>
+                    <div class="adv-card">
+                        <div class="adv-icon">🔒</div>
+                        <div class="adv-title">Privacy totale</div>
+                        <div class="adv-desc">Tourne sur ta machine. Tes clés API et données ne quittent jamais ton
+                            ordinateur.</div>
+                    </div>
+                    <div class="adv-card">
+                        <div class="adv-icon">🆓</div>
+                        <div class="adv-title">100% gratuit</div>
+                        <div class="adv-desc">Aucun abonnement. Aucun serveur. Uniquement des APIs publiques gratuites.
+                        </div>
+                    </div>
+                    <div class="adv-card">
+                        <div class="adv-icon">🌍</div>
+                        <div class="adv-title">Pour tout le monde</div>
+                        <div class="adv-desc">Du débutant total au trader pro. L'IA s'adapte au niveau de l'utilisateur.
+                        </div>
+                    </div>
+                    <div class="adv-card">
+                        <div class="adv-icon">⬡</div>
+                        <div class="adv-title">Natif BNB Chain</div>
+                        <div class="adv-desc">Utilise les standards BAP-578 et ERC-8004 lancés en février 2026 par BNB
+                            Chain.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 7 : COÛT -->
+            <div class="section" id="cout">
+                <div class="section-header">
+                    <div class="section-num">07</div>
+                    <div class="section-title">Coût & Stack Technique</div>
+                </div>
+
+                <div class="card" style="padding:0;overflow:hidden">
+                    <table class="cost-table">
+                        <thead>
+                            <tr>
+                                <th>Composant</th>
+                                <th>Usage</th>
+                                <th>Coût</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>OpenClaw</strong></td>
+                                <td>Agent IA local (WhatsApp/Telegram)</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>BSCScan API</strong></td>
+                                <td>Audit smart contracts, données on-chain</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Binance P2P API</strong></td>
+                                <td>Vérification vendeurs P2P</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Binance Market API</strong></td>
+                                <td>Prix, volumes, orderbook en temps réel</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>BNB Testnet Faucet</strong></td>
+                                <td>Déploiement du smart contract NFA</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Python + web3.py</strong></td>
+                                <td>Moteur d'analyse et connexion blockchain</td>
+                                <td><span class="cost-val">GRATUIT</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>TOTAL</strong></td>
+                                <td>Installation complète, usage illimité</td>
+                                <td><span class="cost-val">$0.00</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card" style="padding:0;overflow:hidden;margin-top:16px">
+                    <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
+                        <div class="card-title">Stack Technique</div>
+                    </div>
+                    <div class="tech-row">
+                        <div class="tech-icon">🦞</div>
+                        <div class="tech-name">OpenClaw</div>
+                        <div class="tech-desc">Agent IA open-source — gère la messagerie, la mémoire persistante et les
+                            heartbeats automatiques</div>
+                        <div class="tech-free">Open Source</div>
+                    </div>
+                    <div class="tech-row">
+                        <div class="tech-icon">⬡</div>
+                        <div class="tech-name">BNB Chain (BSC)</div>
+                        <div class="tech-desc">Blockchain sur laquelle vit le NFA — standards BAP-578 + ERC-8004
+                            (standards agents IA, fév. 2026)</div>
+                        <div class="tech-free">Public</div>
+                    </div>
+                    <div class="tech-row">
+                        <div class="tech-icon">🔷</div>
+                        <div class="tech-name">Solidity + web3.py</div>
+                        <div class="tech-desc">Smart contract NFAProtector.sol + moteur Python pour les interactions
+                            blockchain</div>
+                        <div class="tech-free">Open Source</div>
+                    </div>
+                    <div class="tech-row">
+                        <div class="tech-icon">🔍</div>
+                        <div class="tech-name">BSCScan API</div>
+                        <div class="tech-desc">Accès au code source des contrats, historique des transactions, données
+                            des holders</div>
+                        <div class="tech-free">Gratuit</div>
+                    </div>
+                    <div class="tech-row">
+                        <div class="tech-icon">📊</div>
+                        <div class="tech-name">Binance APIs publiques</div>
+                        <div class="tech-desc">Prix en temps réel, données P2P, orderbook — aucune authentification
+                            requise</div>
+                        <div class="tech-free">Gratuit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 8 : CONCOURS -->
+            <div class="section" id="concours">
+                <div class="section-header">
+                    <div class="section-num">08</div>
+                    <div class="section-title">Contexte du Concours</div>
+                </div>
+
+                <div class="comp-box" style="margin-bottom:16px">
+                    <p><strong>OpenClaw × Binance AI Builder Challenge</strong> est un hackathon lancé le 4 mars 2026 et
+                        clôturant le 18 mars 2026. L'objectif : construire un assistant IA avec OpenClaw qui améliore
+                        l'expérience des utilisateurs Binance. Le meilleur projet remporte une part d'un prize pool en
+                        BNB.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Pourquoi CLAW NFA Protector est positionné pour gagner</div>
+                    <ul class="check-list">
+                        <li><strong>Utilise exactement la nouvelle infrastructure BNB Chain</strong> — les standards
+                            BAP-578 et ERC-8004 ont été lancés en février 2026. Ce hackathon a été créé précisément pour
+                            trouver des builders qui construisent dessus. Notre solution est la seule à les utiliser.
+                        </li>
+                        <li><strong>Résout le vrai problème n°1</strong> — les pertes par rug pulls, scams P2P et
+                            liquidations représentent des milliards perdus chaque année sur Binance. Ce n'est pas un
+                            outil éducatif ou un dashboard de plus — c'est une protection active.</li>
+                        <li><strong>Testable immédiatement par le jury</strong> — le jury ouvre Telegram, parle au bot,
+                            voit l'audit d'un vrai token, voit le NFA se déployer. Pas besoin d'installer quoi que ce
+                            soit.</li>
+                        <li><strong>OpenClaw est parfait pour ça</strong> — mémoire persistante, heartbeats toutes les
+                            30 min, connexion WhatsApp/Telegram, exécution locale. Tout ce dont un NFA Protector a
+                            besoin est déjà là.</li>
+                        <li><strong>Zéro coût</strong> — aucun abonnement, aucun serveur. Tourne sur l'ordinateur de
+                            l'utilisateur.</li>
+                    </ul>
+                </div>
+
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                    <span class="tag tag-green">BAP-578</span>
+                    <span class="tag tag-green">ERC-8004</span>
+                    <span class="tag tag-blue">OpenClaw Skill</span>
+                    <span class="tag tag-blue">BNB Chain</span>
+                    <span class="tag tag-amber">Hackathon 2026</span>
+                    <span class="tag tag-amber">100% Gratuit</span>
+                </div>
+            </div>
+
+            <!-- SECTION 9 : LIENS -->
+            <div class="section" id="liens">
+                <div class="section-header">
+                    <div class="section-num">09</div>
+                    <div class="section-title">Liens & Ressources</div>
+                </div>
+
+                <a class="link-row" href="https://anonymousrod.github.io/claw-nfa-protector/demo.html" target="_blank">
+                    <div class="link-icon">🌐</div>
+                    <div class="link-text">Démo Interactive en ligne</div>
+                    <div class="link-url">anonymousrod.github.io/claw-nfa-protector/demo.html</div>
+                </a>
+
+                <a class="link-row" href="https://github.com/anonymousrod/claw-nfa-protector" target="_blank">
+                    <div class="link-icon">💻</div>
+                    <div class="link-text">Code source complet sur GitHub</div>
+                    <div class="link-url">github.com/anonymousrod/claw-nfa-protector</div>
+                </a>
+
+                <a class="link-row" href="https://openclaw.ai" target="_blank">
+                    <div class="link-icon">🦞</div>
+                    <div class="link-text">OpenClaw — le moteur de l'agent</div>
+                    <div class="link-url">openclaw.ai</div>
+                </a>
+
+                <a class="link-row" href="https://www.bnbchain.org" target="_blank">
+                    <div class="link-icon">⬡</div>
+                    <div class="link-text">BNB Chain — la blockchain du NFA</div>
+                    <div class="link-url">bnbchain.org</div>
+                </a>
+
+                <div class="info-box" style="margin-top:20px">
+                    📦 <strong>Fichiers inclus dans le projet :</strong><br>
+                    <code>demo.html</code> — Démo interactive complète (ouvrir dans le navigateur)<br>
+                    <code>SKILL.md</code> — Le skill OpenClaw complet (le cerveau de l'agent)<br>
+                    <code>scripts/nfa_core.py</code> — Moteur Python (audit, P2P, guard, tax)<br>
+                    <code>contracts/NFAProtector.sol</code> — Smart contract Solidity (BNB Chain)
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <p><strong>CLAW NFA PROTECTOR</strong> — OpenClaw × Binance AI Builder Challenge — Mars 2026</p>
+                <p style="margin-top:6px">Conçu et développé avec ❤️ · BNB Chain · BAP-578 · ERC-8004 · 100% Open Source
+                    · $0.00</p>
+            </div>
+
+        </div>
+</body>
+
+</html>
