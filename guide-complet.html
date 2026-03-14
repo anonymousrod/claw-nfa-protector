@@ -4,481 +4,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLAW NFA PROTECTOR — Guide Complet</title>
+    <title>CLAW NFA PROTECTOR — Guide Complet / Complete Guide</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap"
         rel="stylesheet">
     <style>
-        :root {
-            --green: #00c896;
-            --green-light: #e6fff8;
-            --green-dim: rgba(0, 200, 150, 0.1);
-            --amber: #f59e0b;
-            --amber-light: #fffbeb;
-            --red: #ef4444;
-            --red-light: #fef2f2;
-            --blue: #3b82f6;
-            --blue-light: #eff6ff;
-            --dark: #0f172a;
-            --gray-900: #111827;
-            --gray-700: #374151;
-            --gray-500: #6b7280;
-            --gray-300: #d1d5db;
-            --gray-100: #f3f4f6;
-            --gray-50: #f9fafb;
-            --white: #ffffff;
-            --border: #e5e7eb;
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
+        /* ── RESET & BASE ──────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --bg: #f8f9fb;
+            --surface: #ffffff;
+            --dark: #0c1220;
+            --dark2: #1a2332;
+            --green: #00c896;
+            --green2: #00e5a8;
+            --gdim: rgba(0, 200, 150, 0.1);
+            --gdim2: rgba(0, 200, 150, 0.06);
+            --amber: #f59e0b;
+            --adim: rgba(245, 158, 11, 0.1);
+            --red: #ef4444;
+            --rdim: rgba(239, 68, 68, 0.08);
+            --blue: #3b82f6;
+            --bdim: rgba(59, 130, 246, 0.08);
+            --text: #1a2332;
+            --text2: #4b5563;
+            --text3: #9ca3af;
+            --border: #e5e7eb;
+            --border2: rgba(0, 200, 150, 0.2);
+            --radius: 14px;
+            --radius-s: 8px;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.07), 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-m: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --shadow-l: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.6;
-            font-size: 15px;
+            font-family: 'Syne', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ── PRINT ── */
-        @media print {
-            body {
-                background: white;
-                font-size: 12px;
-            }
-
-            .no-print {
-                display: none;
-            }
-
-            .page-break {
-                page-break-before: always;
-            }
-
-            .card {
-                box-shadow: none;
-                border: 1px solid #ddd;
-            }
+        /* ── LANG SWITCH ───────────────────────────────────────────── */
+        .lang-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(12, 18, 32, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 200, 150, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 24px;
+            gap: 12px;
         }
 
-        /* ── LAYOUT ── */
-        .container {
-            max-width: 860px;
+        .lang-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--green);
+            letter-spacing: 0.08em;
+            white-space: nowrap;
+        }
+
+        .lang-logo span {
+            font-size: 1.1rem;
+        }
+
+        .lang-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.55);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .lang-btn.active {
+            background: var(--gdim);
+            border-color: rgba(0, 200, 150, 0.4);
+            color: var(--green);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .flag {
+            font-size: 0.9rem;
+        }
+
+        .print-btn {
+            background: none;
+            border: 1px solid rgba(0, 200, 150, 0.3);
+            color: var(--green);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .print-btn:hover {
+            background: var(--gdim);
+        }
+
+        /* Lang visibility */
+        [data-lang="en"] {
+            display: none;
+        }
+
+        body.en [data-lang="fr"] {
+            display: none;
+        }
+
+        body.en [data-lang="en"] {
+            display: unset;
+        }
+
+        body.en .en-block {
+            display: block;
+        }
+
+        body.en .fr-block {
+            display: none;
+        }
+
+        .en-block {
+            display: none;
+        }
+
+        .fr-block {
+            display: block;
+        }
+
+        /* ── LAYOUT ────────────────────────────────────────────────── */
+        .wrap {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 40px 24px;
+            padding: 88px 20px 60px;
         }
 
-        /* ── COVER ── */
+        /* ── COVER ─────────────────────────────────────────────────── */
         .cover {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f2a1a 100%);
-            color: white;
-            padding: 60px 40px;
-            border-radius: 16px;
-            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 60%, #0d2116 100%);
+            border-radius: var(--radius);
+            padding: clamp(32px, 6vw, 64px);
+            margin-bottom: 32px;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-l);
         }
 
         .cover::before {
             content: '';
             position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(0, 200, 150, 0.15) 0%, transparent 70%);
+            top: -80px;
+            right: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 200, 150, 0.12) 0%, transparent 65%);
             border-radius: 50%;
+            pointer-events: none;
         }
 
-        .cover-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 200, 150, 0.15);
-            border: 1px solid rgba(0, 200, 150, 0.3);
-            color: #00c896;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-        }
-
-        .cover h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 8px;
-            color: white;
-        }
-
-        .cover h1 span {
-            color: #00c896;
-        }
-
-        .cover-subtitle {
-            font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.65);
-            margin-bottom: 32px;
-            font-weight: 400;
-            max-width: 600px;
-        }
-
-        .cover-stats {
-            display: flex;
-            gap: 32px;
-            flex-wrap: wrap;
-        }
-
-        .cover-stat {
-            border-left: 2px solid rgba(0, 200, 150, 0.4);
-            padding-left: 16px;
-        }
-
-        .cover-stat-val {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #00c896;
-            line-height: 1;
-        }
-
-        .cover-stat-lbl {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.45);
-            margin-top: 3px;
-            letter-spacing: 0.05em;
-        }
-
-        /* ── TOC ── */
-        .toc {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 28px 32px;
-            margin-bottom: 32px;
-            box-shadow: var(--shadow);
-        }
-
-        .toc-title {
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--gray-500);
-            margin-bottom: 16px;
-        }
-
-        .toc-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px 32px;
-        }
-
-        .toc-list li a {
-            color: var(--gray-700);
-            text-decoration: none;
-            font-size: 0.88rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.15s;
-        }
-
-        .toc-list li a:hover {
-            color: var(--green);
-        }
-
-        .toc-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.65rem;
-            color: var(--green);
-            min-width: 20px;
-        }
-
-        /* ── SECTIONS ── */
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--green);
-        }
-
-        .section-num {
-            width: 32px;
-            height: 32px;
-            background: var(--dark);
-            color: var(--green);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
-        /* ── CARDS ── */
-        .card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-        }
-
-        .card-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gray-500);
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            color: var(--gray-700);
-            line-height: 1.7;
-            font-size: 0.92rem;
-        }
-
-        /* ── PROBLEM BOX ── */
-        .problem-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .problem-card {
-            background: var(--red-light);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 10px;
-            padding: 18px;
-        }
-
-        .problem-card .icon {
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-        }
-
-        .problem-card .ptitle {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--red);
-            margin-bottom: 6px;
-        }
-
-        .problem-card .pdesc {
-            font-size: 0.8rem;
-            color: #7f1d1d;
-            line-height: 1.5;
-        }
-
-        /* ── SOLUTION HIGHLIGHT ── */
-        .solution-highlight {
-            background: linear-gradient(135deg, var(--green-light), #f0fff8);
-            border: 1px solid rgba(0, 200, 150, 0.3);
-            border-left: 4px solid var(--green);
-            border-radius: 10px;
-            padding: 20px 24px;
-            margin-bottom: 20px;
-        }
-
-        .solution-highlight p {
-            font-size: 1rem;
-            color: #065f46;
-            line-height: 1.7;
-            font-weight: 500;
-        }
-
-        /* ── COMMANDS ── */
-        .cmd-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .cmd-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cmd-card::before {
+        .cover::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--green);
+            bottom: -60px;
+            left: 20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 200, 150, 0.06) 0%, transparent 65%);
+            border-radius: 50%;
+            pointer-events: none;
         }
 
-        .cmd-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.82rem;
-            font-weight: 700;
+        .cover-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(0, 200, 150, 0.12);
+            border: 1px solid rgba(0, 200, 150, 0.25);
             color: var(--green);
-            background: var(--green-dim);
-            padding: 4px 10px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        .cmd-name {
-            font-size: 0.92rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 6px;
-        }
-
-        .cmd-desc {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-
-        .cmd-example {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-100);
-            border-radius: 6px;
-            padding: 8px 12px;
+            padding: 6px 16px;
+            border-radius: 20px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--gray-700);
-            line-height: 1.6;
-        }
-
-        .cmd-free {
-            display: inline-block;
-            margin-top: 8px;
             font-size: 0.65rem;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: var(--green);
-            background: var(--green-dim);
-            padding: 2px 8px;
-            border-radius: 3px;
+            margin-bottom: 20px;
+            animation: fadeUp 0.6s ease both;
         }
 
-        /* ── HOW IT WORKS ── */
-        .flow {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            position: relative;
-        }
-
-        .flow-step {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 18px 14px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        .flow-step::after {
-            content: '→';
-            position: absolute;
-            right: -12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--green);
-            font-size: 1.2rem;
-            z-index: 1;
-        }
-
-        .flow-step:last-child::after {
-            display: none;
-        }
-
-        .flow-num {
-            width: 28px;
-            height: 28px;
-            background: var(--dark);
-            color: var(--green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin: 0 auto 10px;
-        }
-
-        .flow-icon {
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-        }
-
-        .flow-title {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 5px;
-        }
-
-        .flow-desc {
-            font-size: 0.7rem;
-            color: var(--gray-500);
-            line-height: 1.4;
-        }
-
-        /* ── CONVERSATION DEMO ── */
-        .chat-demo {
-            background: #1e293b;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-
-        .chat-bar {
-            background: #0f172a;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chat-bar-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+        .cover-pill-dot {
+            width: 6px;
+            height: 6px;
             background: var(--green);
+            border-radius: 50%;
             animation: pulse 2s ease infinite;
         }
 
@@ -490,188 +253,677 @@
             }
 
             50% {
-                opacity: 0.4
+                opacity: 0.3
             }
         }
 
-        .chat-bar-name {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 0.1em;
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
         }
 
-        .chat-messages {
+        .cover h1 {
+            font-size: clamp(2rem, 6vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.06;
+            color: #fff;
+            margin-bottom: 16px;
+            animation: fadeUp 0.6s 0.1s ease both;
+        }
+
+        .cover h1 em {
+            font-style: normal;
+            color: var(--green);
+            display: block;
+        }
+
+        .cover-sub {
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            color: rgba(255, 255, 255, 0.55);
+            max-width: 560px;
+            margin-bottom: 32px;
+            font-weight: 400;
+            animation: fadeUp 0.6s 0.2s ease both;
+        }
+
+        .cover-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            animation: fadeUp 0.6s 0.3s ease both;
+        }
+
+        @media (max-width: 600px) {
+            .cover-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .cstat {
+            border-left: 2px solid rgba(0, 200, 150, 0.35);
+            padding-left: 14px;
+        }
+
+        .cstat-val {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 800;
+            color: var(--green);
+            line-height: 1;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cstat-lbl {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.38);
+            margin-top: 4px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── TOC ───────────────────────────────────────────────────── */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .toc-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 14px;
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 24px;
+        }
+
+        @media (max-width: 500px) {
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text2);
+            text-decoration: none;
+            padding: 5px 0;
+            transition: color 0.15s;
+        }
+
+        .toc-item:hover {
+            color: var(--green);
+        }
+
+        .toc-n {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--green);
+            min-width: 22px;
+            font-weight: 700;
+        }
+
+        /* ── SECTIONS ──────────────────────────────────────────────── */
+        .section {
+            margin-bottom: 36px;
+            scroll-margin-top: 80px;
+        }
+
+        .sec-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--green);
+        }
+
+        .sec-num {
+            width: 34px;
+            height: 34px;
+            background: var(--dark);
+            color: var(--green);
+            border-radius: var(--radius-s);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sec-title {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* ── CARDS ─────────────────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: clamp(16px, 3vw, 24px);
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 10px;
+        }
+
+        .card p,
+        .card li {
+            font-size: 0.9rem;
+            color: var(--text2);
+            line-height: 1.7;
+        }
+
+        /* ── PROBLEM GRID ──────────────────────────────────────────── */
+        .prob-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        @media (max-width: 560px) {
+            .prob-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .prob-card {
+            background: rgba(239, 68, 68, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: var(--radius);
+            padding: 18px;
+        }
+
+        .prob-icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .prob-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #b91c1c;
+            margin-bottom: 6px;
+        }
+
+        .prob-desc {
+            font-size: 0.78rem;
+            color: #7f1d1d;
+            line-height: 1.55;
+        }
+
+        /* ── SOLUTION BOX ──────────────────────────────────────────── */
+        .sol-box {
+            background: linear-gradient(135deg, rgba(0, 200, 150, 0.06), rgba(0, 229, 168, 0.04));
+            border: 1px solid rgba(0, 200, 150, 0.2);
+            border-left: 4px solid var(--green);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 14px;
+        }
+
+        .sol-box p {
+            font-size: 0.95rem;
+            color: #065f46;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        /* ── FLOW ──────────────────────────────────────────────────── */
+        .flow-wrap {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        @media (max-width: 640px) {
+            .flow-wrap {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 360px) {
+            .flow-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flow-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .flow-card::after {
+            content: '→';
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--green);
+            font-size: 1rem;
+            z-index: 1;
+        }
+
+        .flow-card:last-child::after {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+
+            .flow-card:nth-child(2)::after,
+            .flow-card:last-child::after {
+                display: none;
+            }
+
+            .flow-card:nth-child(1)::after,
+            .flow-card:nth-child(3)::after {
+                display: none;
+            }
+        }
+
+        .flow-n {
+            width: 26px;
+            height: 26px;
+            background: var(--dark);
+            color: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 700;
+            margin: 0 auto 8px;
+        }
+
+        .flow-ic {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .flow-t {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .flow-d {
+            font-size: 0.68rem;
+            color: var(--text3);
+            line-height: 1.4;
+        }
+
+        /* ── COMMANDS ──────────────────────────────────────────────── */
+        .cmd-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 560px) {
+            .cmd-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cmd-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .cmd-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--green), var(--green2));
+        }
+
+        .cmd-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-m);
+            border-color: var(--border2);
+        }
+
+        .cmd-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--green);
+            background: var(--gdim);
+            padding: 3px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .cmd-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .cmd-desc {
+            font-size: 0.78rem;
+            color: var(--text2);
+            line-height: 1.55;
+            margin-bottom: 10px;
+        }
+
+        .cmd-ex {
+            background: #f8fafb;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-s);
+            padding: 10px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.67rem;
+            color: var(--text2);
+            line-height: 1.65;
+            white-space: pre-wrap;
+        }
+
+        .cmd-free {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--green);
+            background: var(--gdim);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        .cmd-full {
+            grid-column: 1 / -1;
+        }
+
+        /* ── CHAT DEMO ─────────────────────────────────────────────── */
+        .chat-wrap {
+            background: #111827;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-m);
+        }
+
+        .chat-head {
+            background: #0c1220;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .chat-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 1.5s ease infinite;
+        }
+
+        .chat-lbl {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .chat-body {
             padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        .chat-msg {
-            max-width: 85%;
+        .msg {
+            max-width: 88%;
             padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 0.78rem;
-            line-height: 1.55;
+            border-radius: 12px;
+            font-size: 0.76rem;
+            line-height: 1.6;
+            word-break: break-word;
         }
 
-        .chat-msg.user {
+        .msg.user {
+            align-self: flex-end;
             background: rgba(0, 200, 150, 0.15);
             border: 1px solid rgba(0, 200, 150, 0.2);
             color: rgba(255, 255, 255, 0.9);
-            align-self: flex-end;
             border-bottom-right-radius: 3px;
         }
 
-        .chat-msg.bot {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.85);
+        .msg.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            color: rgba(255, 255, 255, 0.82);
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             border-bottom-left-radius: 3px;
             white-space: pre-wrap;
         }
 
-        .chat-msg.bot strong {
+        .msg.bot strong {
             color: var(--green);
         }
 
-        /* ── COST TABLE ── */
+        /* ── COST TABLE ────────────────────────────────────────────── */
         .cost-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+
+        .cost-table thead tr {
+            background: var(--dark);
         }
 
         .cost-table th {
-            background: var(--dark);
-            color: var(--green);
-            padding: 10px 16px;
+            padding: 11px 16px;
             text-align: left;
-            font-size: 0.72rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            color: var(--green);
             font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .cost-table td {
             padding: 10px 16px;
             border-bottom: 1px solid var(--border);
-            color: var(--gray-700);
+            color: var(--text2);
+            font-size: 0.83rem;
         }
 
         .cost-table tr:last-child td {
-            background: var(--green-light);
+            background: var(--gdim);
             font-weight: 700;
             color: #065f46;
             border-bottom: none;
         }
 
-        .cost-val {
+        .free {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
             color: var(--green);
-            font-size: 0.82rem;
         }
 
-        .cost-table tr:last-child .cost-val {
-            color: #065f46;
+        .cost-table tr:last-child .free {
             font-size: 1rem;
         }
 
-        /* ── ADVANTAGES ── */
-        .adv-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-        }
-
-        .adv-card {
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 18px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-
-        .adv-icon {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .adv-title {
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 6px;
-        }
-
-        .adv-desc {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            line-height: 1.5;
-        }
-
-        /* ── TECH STACK ── */
+        /* ── TECH ROWS ─────────────────────────────────────────────── */
         .tech-row {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 11px 16px;
             border-bottom: 1px solid var(--border);
-            font-size: 0.88rem;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
         }
 
         .tech-row:last-child {
             border-bottom: none;
         }
 
-        .tech-icon {
-            font-size: 1.2rem;
+        .tech-ic {
+            font-size: 1.1rem;
             flex-shrink: 0;
-            width: 28px;
+            width: 24px;
             text-align: center;
         }
 
-        .tech-name {
-            font-weight: 600;
+        .tech-n {
+            font-weight: 700;
             color: var(--dark);
-            min-width: 160px;
-        }
-
-        .tech-desc {
-            color: var(--gray-500);
+            min-width: 130px;
             font-size: 0.82rem;
         }
 
+        .tech-d {
+            font-size: 0.78rem;
+            color: var(--text2);
+            flex: 1;
+        }
+
         .tech-free {
-            margin-left: auto;
-            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--green);
-            background: var(--green-dim);
+            background: var(--gdim);
             padding: 2px 8px;
             border-radius: 3px;
             white-space: nowrap;
+            margin-left: auto;
         }
 
-        /* ── COMPETITION ── */
+        /* ── ADV GRID ──────────────────────────────────────────────── */
+        .adv-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .adv-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .adv-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .adv-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 14px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+
+        .adv-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--border2);
+            box-shadow: var(--shadow-m);
+        }
+
+        .adv-ic {
+            font-size: 1.7rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .adv-t {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .adv-d {
+            font-size: 0.73rem;
+            color: var(--text3);
+            line-height: 1.5;
+        }
+
+        /* ── COMP BOX ──────────────────────────────────────────────── */
         .comp-box {
             background: linear-gradient(135deg, #fffbeb, #fff7ed);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.25);
             border-left: 4px solid var(--amber);
-            border-radius: 10px;
-            padding: 20px 24px;
+            border-radius: var(--radius);
+            padding: 18px 22px;
+            margin-bottom: 14px;
         }
 
         .comp-box p {
+            font-size: 0.88rem;
             color: #78350f;
-            font-size: 0.9rem;
             line-height: 1.7;
         }
 
@@ -679,747 +931,911 @@
             color: #92400e;
         }
 
-        /* ── INFO BOX ── */
+        /* ── INFO BOX ──────────────────────────────────────────────── */
         .info-box {
-            background: var(--blue-light);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: rgba(59, 130, 246, 0.06);
+            border: 1px solid rgba(59, 130, 246, 0.18);
             border-left: 4px solid var(--blue);
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin: 16px 0;
-            font-size: 0.85rem;
+            border-radius: var(--radius-s);
+            padding: 13px 17px;
+            margin: 14px 0;
+            font-size: 0.83rem;
             color: #1e40af;
             line-height: 1.6;
         }
 
-        /* ── LINKS ── */
-        .link-row {
+        /* ── LINK ROWS ─────────────────────────────────────────────── */
+        .link-card {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
-            background: white;
+            padding: 13px 16px;
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: var(--radius-s);
             margin-bottom: 8px;
             text-decoration: none;
             box-shadow: var(--shadow);
+            transition: all 0.2s;
         }
 
-        .link-row:hover {
-            border-color: var(--green);
+        .link-card:hover {
+            border-color: var(--border2);
+            transform: translateX(4px);
         }
 
-        .link-icon {
-            font-size: 1.1rem;
+        .link-ic {
+            font-size: 1rem;
+            flex-shrink: 0;
         }
 
-        .link-text {
-            flex: 1;
+        .link-t {
             font-size: 0.85rem;
             font-weight: 600;
             color: var(--dark);
+            flex: 1;
         }
 
-        .link-url {
+        .link-u {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
+            font-size: 0.66rem;
             color: var(--green);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
         }
 
-        /* ── FOOTER ── */
-        .footer {
-            margin-top: 48px;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-            font-size: 0.78rem;
-            color: var(--gray-500);
-        }
-
-        /* ── PRINT BUTTON ── */
-        .print-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--dark);
-            color: var(--green);
-            border: 1px solid rgba(0, 200, 150, 0.3);
-            border-radius: 8px;
-            padding: 10px 18px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            cursor: pointer;
-            letter-spacing: 0.1em;
-            transition: all 0.2s;
-            z-index: 100;
-        }
-
-        .print-btn:hover {
-            background: var(--green);
-            color: var(--dark);
-        }
-
-        /* ── CHECK LIST ── */
-        .check-list {
+        /* ── CHECKLIST ─────────────────────────────────────────────── */
+        .chklist {
             list-style: none;
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
-        .check-list li {
+        .chklist li {
             display: flex;
             align-items: flex-start;
             gap: 10px;
-            font-size: 0.88rem;
-            color: var(--gray-700);
-            line-height: 1.5;
+            font-size: 0.87rem;
+            color: var(--text2);
+            line-height: 1.55;
         }
 
-        .check-list li::before {
+        .chklist li::before {
             content: '✓';
             color: var(--green);
-            font-weight: 700;
+            font-weight: 800;
             flex-shrink: 0;
-            margin-top: 1px;
+            margin-top: 2px;
+            font-size: 0.8rem;
         }
 
-        /* ── TAG ── */
+        /* ── TAGS ──────────────────────────────────────────────────── */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
         .tag {
-            display: inline-block;
-            font-size: 0.68rem;
-            font-weight: 600;
+            font-size: 0.65rem;
+            font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            padding: 2px 8px;
+            padding: 3px 9px;
             border-radius: 4px;
-            margin: 2px;
         }
 
-        .tag-green {
-            background: var(--green-dim);
+        .tg {
+            background: var(--gdim);
             color: #065f46;
         }
 
-        .tag-amber {
-            background: var(--amber-light);
+        .ta {
+            background: var(--adim);
             color: #78350f;
         }
 
-        .tag-blue {
-            background: var(--blue-light);
+        .tb {
+            background: var(--bdim);
             color: #1e40af;
+        }
+
+        /* ── FOOTER ────────────────────────────────────────────────── */
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.76rem;
+            color: var(--text3);
+            line-height: 1.8;
+        }
+
+        /* ── PRINT ─────────────────────────────────────────────────── */
+        @media print {
+
+            .lang-bar,
+            .print-btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .wrap {
+                padding-top: 20px;
+            }
+
+            .card,
+            .cmd-card,
+            .adv-card {
+                box-shadow: none;
+            }
+
+            .cover {
+                border-radius: 0;
+            }
+
+            [data-lang="en"] {
+                display: none !important;
+            }
+
+            body.en [data-lang="fr"] {
+                display: none !important;
+            }
+
+            body.en [data-lang="en"] {
+                display: unset !important;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <button class="print-btn no-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+    <!-- NAVBAR -->
+    <div class="lang-bar">
+        <div class="lang-logo"><span>🛡️</span> CLAW NFA PROTECTOR</div>
+        <div class="lang-right">
+            <button class="lang-btn active" id="btn-fr" onclick="setLang('fr')"><span class="flag">🇫🇷</span>
+                FR</button>
+            <button class="lang-btn" id="btn-en" onclick="setLang('en')"><span class="flag">🇬🇧</span> EN</button>
+            <button class="print-btn" onclick="window.print()">🖨 PDF</button>
+        </div>
+    </div>
 
-    <div class="container">
+    <div class="wrap">
 
-        <!-- COVER -->
+        <!-- ══════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
         <div class="cover">
-            <div class="cover-badge">
-                <span>🛡️</span> Guide Complet du Produit
+            <div class="cover-pill">
+                <div class="cover-pill-dot"></div>
+                <span data-lang="fr">Guide Complet du Produit · 2026</span>
+                <span data-lang="en">Complete Product Guide · 2026</span>
             </div>
-            <h1>CLAW NFA<br><span>PROTECTOR</span></h1>
-            <p class="cover-subtitle">Ton garde du corps IA personnel sur BNB Chain — qui protège chaque utilisateur
+            <h1>CLAW NFA<br><em>PROTECTOR</em></h1>
+            <p class="cover-sub fr-block">Ton garde du corps IA personnel sur BNB Chain — qui protège chaque utilisateur
                 Binance 24h/7j, avant qu'il perde de l'argent.</p>
+            <p class="cover-sub en-block">Your personal AI bodyguard on BNB Chain — protecting every Binance user 24/7,
+                before they lose money.</p>
             <div class="cover-stats">
-                <div class="cover-stat">
-                    <div class="cover-stat-val">$0</div>
-                    <div class="cover-stat-lbl">Coût total</div>
+                <div class="cstat">
+                    <div class="cstat-val">$0</div>
+                    <div class="cstat-lbl fr-block">Coût total</div>
+                    <div class="cstat-lbl en-block">Total cost</div>
                 </div>
-                <div class="cover-stat">
-                    <div class="cover-stat-val">5</div>
-                    <div class="cover-stat-lbl">Super-pouvoirs</div>
+                <div class="cstat">
+                    <div class="cstat-val">5</div>
+                    <div class="cstat-lbl fr-block">Super-pouvoirs</div>
+                    <div class="cstat-lbl en-block">Superpowers</div>
                 </div>
-                <div class="cover-stat">
-                    <div class="cover-stat-val">30s</div>
-                    <div class="cover-stat-lbl">Pour auditer un token</div>
+                <div class="cstat">
+                    <div class="cstat-val">30s</div>
+                    <div class="cstat-lbl fr-block">Audit token</div>
+                    <div class="cstat-lbl en-block">Token audit</div>
                 </div>
-                <div class="cover-stat">
-                    <div class="cover-stat-val">24/7</div>
-                    <div class="cover-stat-lbl">Surveillance continue</div>
+                <div class="cstat">
+                    <div class="cstat-val">24/7</div>
+                    <div class="cstat-lbl fr-block">Surveillance</div>
+                    <div class="cstat-lbl en-block">Monitoring</div>
                 </div>
             </div>
         </div>
 
-        <!-- TOC -->
+        <!-- TABLE DES MATIÈRES -->
         <div class="toc">
-            <div class="toc-title">Table des matières</div>
-            <ul class="toc-list">
-                <li><a href="#contexte"><span class="toc-num">01</span> Contexte & problème</a></li>
-                <li><a href="#solution"><span class="toc-num">02</span> La solution</a></li>
-                <li><a href="#fonctionnement"><span class="toc-num">03</span> Comment ça fonctionne</a></li>
-                <li><a href="#commandes"><span class="toc-num">04</span> Les 5 commandes</a></li>
-                <li><a href="#demos"><span class="toc-num">05</span> Exemples de conversation</a></li>
-                <li><a href="#avantages"><span class="toc-num">06</span> Avantages clés</a></li>
-                <li><a href="#cout"><span class="toc-num">07</span> Coût & stack technique</a></li>
-                <li><a href="#concours"><span class="toc-num">08</span> Contexte du concours</a></li>
-                <li><a href="#liens"><span class="toc-num">09</span> Liens & ressources</a></li>
-            </ul>
-        </div>
-
-        <!-- SECTION 1 : CONTEXTE -->
-        <div class="section" id="contexte">
-            <div class="section-header">
-                <div class="section-num">01</div>
-                <div class="section-title">Contexte & Problème</div>
-            </div>
-
-            <div class="card">
-                <p>Binance est la plus grande plateforme d'échange de cryptomonnaies au monde. Des millions de personnes
-                    y achètent, vendent et échangent des actifs numériques chaque jour. Pourtant, même en 2026,
-                    <strong>la majorité des utilisateurs perdent de l'argent non pas à cause du marché, mais à cause de
-                        la fraude, de la manipulation et du manque d'information au moment où ça compte.</strong></p>
-            </div>
-
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="icon">💣</div>
-                    <div class="ptitle">Rug Pulls & Tokens Scam</div>
-                    <div class="pdesc">Des milliers de faux tokens sont créés chaque semaine sur BNB Chain. Les
-                        créateurs disparaissent avec l'argent des acheteurs. Il n'existait aucun outil gratuit et simple
-                        pour vérifier un contrat en 30 secondes.</div>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">🤝</div>
-                    <div class="ptitle">Fraudes P2P</div>
-                    <div class="pdesc">Sur Binance P2P, des vendeurs malveillants prennent l'argent et disparaissent.
-                        Les utilisateurs n'ont aucun moyen simple de vérifier la fiabilité d'un vendeur avant d'envoyer
-                        leur argent.</div>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">😴</div>
-                    <div class="ptitle">Liquidations à 3h du matin</div>
-                    <div class="pdesc">Les positions à levier peuvent être liquidées à n'importe quelle heure. Sans
-                        surveillance continue, un utilisateur peut perdre tout son capital pendant son sommeil, sans
-                        aucune alerte.</div>
-                </div>
-                <div class="problem-card">
-                    <div class="icon">😕</div>
-                    <div class="ptitle">Incompréhension totale</div>
-                    <div class="pdesc">La majorité des nouveaux utilisateurs ne comprennent pas les concepts de base :
-                        liquidation, levier, rug pull, DeFi. Ils agissent sans comprendre les risques réels de chaque
-                        action.</div>
-                </div>
-            </div>
-
-            <div class="info-box">
-                💡 <strong>Le problème central :</strong> tous les outils existants sont <em>réactifs</em>. Ils te
-                montrent ce qui s'est passé APRÈS que tu as perdu. CLAW NFA Protector est le premier outil qui
-                intervient <em>avant</em>.
+            <div class="toc-label fr-block">Table des matières</div>
+            <div class="toc-label en-block">Table of Contents</div>
+            <div class="toc-grid">
+                <a class="toc-item" href="#s1"><span class="toc-n">01</span><span data-lang="fr">Contexte &
+                        Problème</span><span data-lang="en">Context & Problem</span></a>
+                <a class="toc-item" href="#s2"><span class="toc-n">02</span><span data-lang="fr">La Solution</span><span
+                        data-lang="en">The Solution</span></a>
+                <a class="toc-item" href="#s3"><span class="toc-n">03</span><span data-lang="fr">Comment ça
+                        fonctionne</span><span data-lang="en">How it works</span></a>
+                <a class="toc-item" href="#s4"><span class="toc-n">04</span><span data-lang="fr">Les 5
+                        Commandes</span><span data-lang="en">The 5 Commands</span></a>
+                <a class="toc-item" href="#s5"><span class="toc-n">05</span><span data-lang="fr">Exemples de
+                        conversation</span><span data-lang="en">Conversation examples</span></a>
+                <a class="toc-item" href="#s6"><span class="toc-n">06</span><span data-lang="fr">Avantages
+                        clés</span><span data-lang="en">Key advantages</span></a>
+                <a class="toc-item" href="#s7"><span class="toc-n">07</span><span data-lang="fr">Coût & Stack
+                        technique</span><span data-lang="en">Cost & Tech stack</span></a>
+                <a class="toc-item" href="#s8"><span class="toc-n">08</span><span data-lang="fr">Contexte du
+                        concours</span><span data-lang="en">Competition context</span></a>
+                <a class="toc-item" href="#s9"><span class="toc-n">09</span><span data-lang="fr">Liens &
+                        ressources</span><span data-lang="en">Links & resources</span></a>
             </div>
         </div>
 
-        <!-- SECTION 2 : SOLUTION -->
-        <div class="section" id="solution">
-            <div class="section-header">
-                <div class="section-num">02</div>
-                <div class="section-title">La Solution</div>
-            </div>
-
-            <div class="solution-highlight">
-                <p>🛡️ <strong>CLAW NFA Protector</strong> est un <strong>agent IA personnel</strong> déployé sur BNB
-                    Chain qui surveille ton compte Binance 24h/7j — directement depuis ton WhatsApp ou Telegram — et te
-                    protège avant que tu perdes de l'argent.</p>
+        <!-- ══════════════════════════════════════════════════
+     01 — CONTEXTE
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s1">
+            <div class="sec-head">
+                <div class="sec-num">01</div>
+                <div class="sec-title fr-block">Contexte & Problème</div>
+                <div class="sec-title en-block">Context & Problem</div>
             </div>
 
             <div class="card">
-                <div class="card-title">Ce que c'est exactement</div>
-                <p>C'est un <strong>skill</strong> (extension) pour <strong>OpenClaw</strong> — un assistant IA
-                    open-source qui tourne sur ton ordinateur et se connecte à tes applications de messagerie. Une fois
-                    installé, ton NFA Protector est un agent autonome qui tourne en arrière-plan, surveille les marchés,
-                    et t'envoie des alertes directement sur WhatsApp ou Telegram dès qu'il détecte un danger.</p>
+                <p class="fr-block">Binance est la plus grande plateforme d'échange de cryptomonnaies au monde. Des
+                    millions de personnes y achètent, vendent et échangent des actifs numériques chaque jour. Pourtant,
+                    même en 2026, <strong>la majorité des utilisateurs perdent de l'argent non pas à cause du marché,
+                        mais à cause de la fraude, de la manipulation et du manque d'information au bon moment.</strong>
+                </p>
+                <p class="en-block">Binance is the world's largest cryptocurrency exchange. Millions of people buy, sell
+                    and trade digital assets on it every day. Yet even in 2026, <strong>most users lose money not
+                        because of the market, but because of fraud, manipulation, and lack of information at the right
+                        moment.</strong></p>
+            </div>
+
+            <div class="prob-grid">
+                <div class="prob-card">
+                    <span class="prob-icon">💣</span>
+                    <div class="prob-title fr-block">Rug Pulls & Tokens Scam</div>
+                    <div class="prob-title en-block">Rug Pulls & Scam Tokens</div>
+                    <div class="prob-desc fr-block">Des milliers de faux tokens sont créés chaque semaine sur BNB Chain.
+                        Les créateurs disparaissent avec l'argent des acheteurs. Aucun outil gratuit et simple
+                        n'existait pour vérifier un contrat en 30 secondes.</div>
+                    <div class="prob-desc en-block">Thousands of fake tokens are created every week on BNB Chain.
+                        Creators disappear with buyers' money. No free, simple tool existed to check a contract in 30
+                        seconds.</div>
+                </div>
+                <div class="prob-card">
+                    <span class="prob-icon">🤝</span>
+                    <div class="prob-title fr-block">Fraudes P2P</div>
+                    <div class="prob-title en-block">P2P Fraud</div>
+                    <div class="prob-desc fr-block">Sur Binance P2P, des vendeurs malveillants prennent l'argent et
+                        disparaissent. Les utilisateurs n'ont aucun moyen simple de vérifier la fiabilité d'un vendeur
+                        avant d'envoyer leur argent.</div>
+                    <div class="prob-desc en-block">On Binance P2P, malicious sellers take the money and disappear.
+                        Users have no simple way to verify a seller's reliability before sending their funds.</div>
+                </div>
+                <div class="prob-card">
+                    <span class="prob-icon">😴</span>
+                    <div class="prob-title fr-block">Liquidations à 3h du matin</div>
+                    <div class="prob-title en-block">3 AM Liquidations</div>
+                    <div class="prob-desc fr-block">Les positions à levier peuvent être liquidées à n'importe quelle
+                        heure. Sans surveillance continue, un utilisateur peut perdre tout son capital pendant son
+                        sommeil, sans aucune alerte.</div>
+                    <div class="prob-desc en-block">Leveraged positions can be liquidated at any hour. Without
+                        continuous monitoring, a user can lose all their capital while sleeping, with no warning
+                        whatsoever.</div>
+                </div>
+                <div class="prob-card">
+                    <span class="prob-icon">😕</span>
+                    <div class="prob-title fr-block">Incompréhension totale</div>
+                    <div class="prob-title en-block">Total Lack of Understanding</div>
+                    <div class="prob-desc fr-block">La majorité des nouveaux utilisateurs ne comprennent pas les
+                        concepts de base : liquidation, levier, rug pull. Ils agissent sans comprendre les risques
+                        réels.</div>
+                    <div class="prob-desc en-block">Most new users don't understand basic concepts: liquidation,
+                        leverage, rug pull. They act without understanding the real risks of each action.</div>
+                </div>
+            </div>
+
+            <div class="info-box fr-block">💡 <strong>Le problème central :</strong> tous les outils existants sont
+                <em>réactifs</em>. Ils te montrent ce qui s'est passé APRÈS que tu as perdu. CLAW NFA Protector
+                intervient <em>avant</em>.</div>
+            <div class="info-box en-block">💡 <strong>The core problem:</strong> all existing tools are
+                <em>reactive</em>. They show you what happened AFTER you lost. CLAW NFA Protector acts <em>before</em>.
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════
+     02 — SOLUTION
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s2">
+            <div class="sec-head">
+                <div class="sec-num">02</div>
+                <div class="sec-title fr-block">La Solution</div>
+                <div class="sec-title en-block">The Solution</div>
+            </div>
+
+            <div class="sol-box">
+                <p class="fr-block">🛡️ <strong>CLAW NFA Protector</strong> est un <strong>agent IA personnel</strong>
+                    déployé sur BNB Chain qui surveille ton compte Binance 24h/7j — directement depuis ton WhatsApp ou
+                    Telegram — et te protège avant que tu perdes de l'argent.</p>
+                <p class="en-block">🛡️ <strong>CLAW NFA Protector</strong> is a <strong>personal AI agent</strong>
+                    deployed on BNB Chain that monitors your Binance account 24/7 — directly from your WhatsApp or
+                    Telegram — and protects you before you lose money.</p>
             </div>
 
             <div class="card">
-                <div class="card-title">Ce qui le rend unique</div>
-                <ul class="check-list">
-                    <li>Ce n'est pas un dashboard — pas besoin d'ouvrir une application. Il vient te parler.</li>
-                    <li>Ce n'est pas un bot réactif — il agit en continu, même quand tu dors.</li>
+                <div class="card-label fr-block">Ce que c'est exactement</div>
+                <div class="card-label en-block">What it is exactly</div>
+                <p class="fr-block">C'est un <strong>skill</strong> (extension) pour <strong>OpenClaw</strong> — un
+                    assistant IA open-source qui tourne sur ton ordinateur. Une fois installé, ton NFA Protector est un
+                    agent autonome qui surveille les marchés en arrière-plan, et t'envoie des alertes sur WhatsApp ou
+                    Telegram dès qu'il détecte un danger.</p>
+                <p class="en-block">It's a <strong>skill</strong> (extension) for <strong>OpenClaw</strong> — an
+                    open-source AI assistant that runs on your computer. Once installed, your NFA Protector is an
+                    autonomous agent that monitors markets in the background, and sends you alerts on WhatsApp or
+                    Telegram as soon as it detects danger.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-label fr-block">Ce qui le rend unique</div>
+                <div class="card-label en-block">What makes it unique</div>
+                <ul class="chklist fr-block">
+                    <li>Pas un dashboard — pas besoin d'ouvrir une application. Il vient te parler directement.</li>
+                    <li>Pas un bot réactif — il agit en continu, même quand tu dors.</li>
                     <li>C'est un <strong>NFA (Non-Fungible Agent)</strong> — un agent avec sa propre identité sur BNB
-                        Chain, selon le standard BAP-578 lancé en février 2026.</li>
-                    <li>Il utilise uniquement des APIs gratuites — aucun abonnement, aucun serveur, aucune dépense.</li>
+                        Chain, selon le standard BAP-578 (fév. 2026).</li>
+                    <li>APIs gratuites uniquement — aucun abonnement, aucun serveur, aucune dépense.</li>
                     <li>Tes données restent sur ta machine — rien n'est envoyé à un serveur externe.</li>
+                </ul>
+                <ul class="chklist en-block">
+                    <li>Not a dashboard — no need to open an app. It comes to talk to you directly.</li>
+                    <li>Not a reactive bot — it acts continuously, even while you sleep.</li>
+                    <li>It's a <strong>NFA (Non-Fungible Agent)</strong> — an agent with its own on-chain identity on
+                        BNB Chain, per the BAP-578 standard (Feb. 2026).</li>
+                    <li>Free APIs only — no subscription, no server, no expense.</li>
+                    <li>Your data stays on your machine — nothing is sent to an external server.</li>
                 </ul>
             </div>
         </div>
 
-        <!-- SECTION 3 : FONCTIONNEMENT -->
-        <div class="section" id="fonctionnement">
-            <div class="section-header">
-                <div class="section-num">03</div>
-                <div class="section-title">Comment ça fonctionne</div>
+        <!-- ══════════════════════════════════════════════════
+     03 — FONCTIONNEMENT
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s3">
+            <div class="sec-head">
+                <div class="sec-num">03</div>
+                <div class="sec-title fr-block">Comment ça fonctionne</div>
+                <div class="sec-title en-block">How it works</div>
             </div>
 
-            <div class="flow">
-                <div class="flow-step">
-                    <div class="flow-num">1</div>
-                    <div class="flow-icon">💬</div>
-                    <div class="flow-title">Tu parles</div>
-                    <div class="flow-desc">Via WhatsApp, Telegram ou Discord. En français ou en anglais. Langage
-                        naturel.</div>
+            <div class="flow-wrap">
+                <div class="flow-card">
+                    <div class="flow-n">1</div>
+                    <span class="flow-ic">💬</span>
+                    <div class="flow-t fr-block">Tu parles</div>
+                    <div class="flow-t en-block">You speak</div>
+                    <div class="flow-d fr-block">WhatsApp, Telegram ou Discord. En français ou anglais.</div>
+                    <div class="flow-d en-block">WhatsApp, Telegram or Discord. In any language.</div>
                 </div>
-                <div class="flow-step">
-                    <div class="flow-num">2</div>
-                    <div class="flow-icon">🧠</div>
-                    <div class="flow-title">OpenClaw comprend</div>
-                    <div class="flow-desc">L'IA locale sur ton PC interprète ta demande et appelle le bon outil.</div>
+                <div class="flow-card">
+                    <div class="flow-n">2</div>
+                    <span class="flow-ic">🧠</span>
+                    <div class="flow-t fr-block">L'IA comprend</div>
+                    <div class="flow-t en-block">AI understands</div>
+                    <div class="flow-d fr-block">OpenClaw local interprète et appelle le bon outil.</div>
+                    <div class="flow-d en-block">Local OpenClaw interprets and calls the right tool.</div>
                 </div>
-                <div class="flow-step">
-                    <div class="flow-num">3</div>
-                    <div class="flow-icon">🔍</div>
-                    <div class="flow-title">Le NFA analyse</div>
-                    <div class="flow-desc">Connexion aux APIs gratuites (BSCScan, Binance) pour obtenir les vraies
-                        données.</div>
+                <div class="flow-card">
+                    <div class="flow-n">3</div>
+                    <span class="flow-ic">🔍</span>
+                    <div class="flow-t fr-block">Le NFA analyse</div>
+                    <div class="flow-t en-block">NFA analyzes</div>
+                    <div class="flow-d fr-block">Connexion aux APIs gratuites pour les vraies données.</div>
+                    <div class="flow-d en-block">Connects to free APIs for real data.</div>
                 </div>
-                <div class="flow-step">
-                    <div class="flow-num">4</div>
-                    <div class="flow-icon">✅</div>
-                    <div class="flow-title">Tu décides</div>
-                    <div class="flow-desc">Le NFA te présente les résultats clairs. Toi seul approuves chaque action.
-                    </div>
+                <div class="flow-card">
+                    <div class="flow-n">4</div>
+                    <span class="flow-ic">✅</span>
+                    <div class="flow-t fr-block">Tu décides</div>
+                    <div class="flow-t en-block">You decide</div>
+                    <div class="flow-d fr-block">Résultats clairs. Toi seul approuves chaque action.</div>
+                    <div class="flow-d en-block">Clear results. Only you approve each action.</div>
                 </div>
             </div>
 
-            <div class="info-box" style="margin-top:20px">
-                🔄 <strong>Surveillance automatique :</strong> Toutes les 30 minutes, le NFA vérifie silencieusement tes
-                positions et tokens surveillés. Il ne t'envoie un message que si quelque chose de dangereux est détecté.
-                Pas de spam — uniquement ce qui compte.
-            </div>
+            <div class="info-box fr-block">🔄 <strong>Surveillance automatique :</strong> toutes les 30 minutes, le NFA
+                vérifie silencieusement tes positions. Il ne t'envoie un message que si quelque chose de dangereux est
+                détecté. Pas de spam.</div>
+            <div class="info-box en-block">🔄 <strong>Automatic monitoring:</strong> every 30 minutes, the NFA silently
+                checks your positions. It only sends you a message if something dangerous is detected. No spam.</div>
         </div>
 
-        <!-- SECTION 4 : COMMANDES -->
-        <div class="section" id="commandes">
-            <div class="section-header">
-                <div class="section-num">04</div>
-                <div class="section-title">Les 5 Commandes</div>
+        <!-- ══════════════════════════════════════════════════
+     04 — COMMANDES
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s4">
+            <div class="sec-head">
+                <div class="sec-num">04</div>
+                <div class="sec-title fr-block">Les 5 Commandes</div>
+                <div class="sec-title en-block">The 5 Commands</div>
             </div>
 
             <div class="cmd-grid">
-
                 <div class="cmd-card">
                     <div class="cmd-tag">/audit</div>
-                    <div class="cmd-name">Audit de Smart Contract</div>
-                    <div class="cmd-desc">Analyse n'importe quel token BSC/BNB Chain en 30 secondes. Détecte les rug
-                        pulls, honeypots, mint illimité, dumps du deployer, et 7 autres patterns de fraude.</div>
-                    <div class="cmd-example">Tu : /audit 0x4e15361...
-                        NFA : ⛔ DANGER — Score 17/22
+                    <div class="cmd-title fr-block">Audit de Smart Contract</div>
+                    <div class="cmd-title en-block">Smart Contract Audit</div>
+                    <div class="cmd-desc fr-block">Analyse n'importe quel token BSC en 30 secondes. Détecte rug pulls,
+                        honeypots, mint illimité, dumps du deployer et 7 autres patterns de fraude.</div>
+                    <div class="cmd-desc en-block">Analyzes any BSC token in 30 seconds. Detects rug pulls, honeypots,
+                        unlimited mint, deployer dumps and 7 other fraud patterns.</div>
+                    <div class="cmd-ex">Tu : /audit 0x4e15361...
+                        NFA : ⛔ DANGER — 17/22
                         🔴 mint() illimité
-                        🔴 Deployer a vendu 89%
+                        🔴 Deployer vendu 89%
                         🔴 Vente bloquée (honeypot)</div>
-                    <div class="cmd-free">API BSCScan · Gratuit</div>
+                    <div class="cmd-free fr-block">BSCScan API · Gratuit</div>
+                    <div class="cmd-free en-block">BSCScan API · Free</div>
                 </div>
 
                 <div class="cmd-card">
                     <div class="cmd-tag">/p2p</div>
-                    <div class="cmd-name">P2P Shield</div>
-                    <div class="cmd-desc">Vérifie un vendeur Binance P2P avant que tu envoies de l'argent. Analyse
-                        l'ancienneté du compte, le taux de complétion, l'historique de feedback et les patterns de scam.
-                    </div>
-                    <div class="cmd-example">Tu : /p2p crypto_seller_99
+                    <div class="cmd-title fr-block">P2P Shield</div>
+                    <div class="cmd-title en-block">P2P Shield</div>
+                    <div class="cmd-desc fr-block">Vérifie un vendeur Binance P2P avant que tu envoies de l'argent.
+                        Analyse l'ancienneté, taux de complétion, feedback et patterns de scam.</div>
+                    <div class="cmd-desc en-block">Checks a Binance P2P seller before you send money. Analyzes account
+                        age, completion rate, feedback and scam patterns.</div>
+                    <div class="cmd-ex">Tu : /p2p crypto_seller_99
                         NFA : ✅ SAFE — Score 0/10
-                        ✅ Compte actif 847 jours
-                        ✅ Completion rate 98.7%
+                        ✅ 847 jours d'ancienneté
+                        ✅ Completion 98.7%
                         ✅ 1204 trades réussis</div>
-                    <div class="cmd-free">API P2P Publique · Gratuit</div>
+                    <div class="cmd-free fr-block">API P2P Publique · Gratuit</div>
+                    <div class="cmd-free en-block">Public P2P API · Free</div>
                 </div>
 
                 <div class="cmd-card">
                     <div class="cmd-tag">/guard</div>
-                    <div class="cmd-name">Garde de Position</div>
-                    <div class="cmd-desc">Surveille un token ou une position 24h/7j. Te réveille si le prix chute
-                        dangereusement, si une baleine vend massivement, ou si ta position à levier approche la
-                        liquidation.</div>
-                    <div class="cmd-example">Tu : /guard BTC
+                    <div class="cmd-title fr-block">Garde de Position</div>
+                    <div class="cmd-title en-block">Position Guard</div>
+                    <div class="cmd-desc fr-block">Surveille un token 24/7. Te réveille si le prix chute dangereusement,
+                        si une baleine vend massivement ou si ta position à levier approche la liquidation.</div>
+                    <div class="cmd-desc en-block">Monitors a token 24/7. Wakes you up if price drops dangerously, a
+                        whale dumps massively, or your leveraged position approaches liquidation.</div>
+                    <div class="cmd-ex">Tu : /guard BTC
                         NFA : 📡 Surveillance activée
                         Prix : $83,241 (+2.1%)
                         ⚠️ Résistance à $84,500
-                        → Alerte si < $80,200</div>
-                            <div class="cmd-free">API Binance Publique · Gratuit</div>
-                    </div>
+                        → Alerte si &lt; $80,200</div>
+                    <div class="cmd-free fr-block">API Binance · Gratuit</div>
+                    <div class="cmd-free en-block">Binance API · Free</div>
+                </div>
 
-                    <div class="cmd-card">
-                        <div class="cmd-tag">/tax</div>
-                        <div class="cmd-name">Rapport Fiscal P&L</div>
-                        <div class="cmd-desc">Génère ton bilan annuel complet depuis l'historique Binance. Calcule tes
-                            gains, pertes, et produit un fichier CSV prêt pour ton comptable en quelques secondes.</div>
-                        <div class="cmd-example">Tu : /tax 2025
-                            NFA : 📊 Rapport 2025
-                            Gains : +$14,832
-                            Pertes : -$3,210
-                            Net : +$11,622
-                            → CSV sauvegardé</div>
-                        <div class="cmd-free">Clé API lecture seule · Gratuit</div>
-                    </div>
+                <div class="cmd-card">
+                    <div class="cmd-tag">/tax</div>
+                    <div class="cmd-title fr-block">Rapport Fiscal P&L</div>
+                    <div class="cmd-title en-block">Tax & P&L Report</div>
+                    <div class="cmd-desc fr-block">Génère ton bilan annuel depuis l'historique Binance. Calcule gains,
+                        pertes et produit un CSV prêt pour ton comptable en quelques secondes.</div>
+                    <div class="cmd-desc en-block">Generates your annual report from Binance history. Calculates gains,
+                        losses and produces a CSV ready for your accountant in seconds.</div>
+                    <div class="cmd-ex">Tu : /tax 2025
+                        NFA : 📊 Rapport 2025
+                        Gains : +$14,832
+                        Pertes : -$3,210
+                        Net : +$11,622
+                        → CSV sauvegardé</div>
+                    <div class="cmd-free fr-block">Clé API lecture · Gratuit</div>
+                    <div class="cmd-free en-block">Read-only API key · Free</div>
+                </div>
 
-                    <div class="cmd-card" style="grid-column: 1 / -1;">
-                        <div class="cmd-tag">/explain</div>
-                        <div class="cmd-name">Crypto Éducateur — Pour tous les niveaux</div>
-                        <div class="cmd-desc">Explique n'importe quel concept crypto en langage clair, avec une analogie
-                            du quotidien et un exemple concret sur Binance. Parfait pour les débutants comme pour les
-                            traders confirmés qui veulent clarifier un point précis. Disponible en français.</div>
-                        <div class="cmd-example">Tu : /explain liquidation
-                            NFA : En clair → Quand ton trade à levier perd trop,
-                            Binance ferme ta position automatiquement.
-                            Analogie : Tu empruntes 900€ pour acheter
-                            une montre à 1000€. Si elle vaut 100€,
-                            le prêteur reprend la montre.
-                            💡 Conseil : Vérifie toujours ton prix
-                            de liquidation avant d'ouvrir une position.</div>
-                        <div class="cmd-free">IA intégrée · Gratuit · Toutes langues</div>
+                <div class="cmd-card cmd-full">
+                    <div class="cmd-tag">/explain</div>
+                    <div class="cmd-title fr-block">Crypto Éducateur — Pour tous les niveaux</div>
+                    <div class="cmd-title en-block">Crypto Educator — For all levels</div>
+                    <div class="cmd-desc fr-block">Explique n'importe quel concept crypto en langage clair, avec une
+                        analogie du quotidien et un exemple concret sur Binance. Disponible en français et en anglais.
                     </div>
-
+                    <div class="cmd-desc en-block">Explains any crypto concept in plain language, with an everyday
+                        analogy and a concrete Binance example. Available in French and English.</div>
+                    <div class="cmd-ex fr-block">Tu : /explain liquidation
+                        NFA : En clair — Quand ton trade à levier perd trop, Binance ferme ta position automatiquement.
+                        Analogie : Tu empruntes 900€ pour une montre à 1000€. Si elle vaut 100€, le prêteur reprend la
+                        montre.
+                        Sur Binance : 10x long BTC à $80,000 → liquidation à $72,800 → tu perds tes 1000 USDT.
+                        💡 Vérifie toujours ton prix de liquidation avant d'ouvrir une position.</div>
+                    <div class="cmd-ex en-block">You : /explain liquidation
+                        NFA : Plain language — When your leveraged trade loses too much, Binance auto-closes your
+                        position.
+                        Analogy : You borrowed $900 to buy a $1,000 watch. If it drops to $100, the lender takes it
+                        back.
+                        On Binance : 10x long BTC at $80,000 → liquidation at $72,800 → you lose your $1,000.
+                        💡 Always check your liquidation price before opening any leveraged position.</div>
+                    <div class="cmd-free fr-block">IA intégrée · Gratuit · Toutes langues</div>
+                    <div class="cmd-free en-block">Built-in AI · Free · All languages</div>
                 </div>
             </div>
-
-            <!-- SECTION 5 : DEMOS -->
-            <div class="section" id="demos">
-                <div class="section-header">
-                    <div class="section-num">05</div>
-                    <div class="section-title">Exemples de Conversation Réels</div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Scénario 1 — Avant d'acheter un token</div>
-                    <div class="chat-demo">
-                        <div class="chat-bar">
-                            <div class="chat-bar-dot"></div>
-                            <div class="chat-bar-name">NFA PROTECTOR · ACTIF</div>
-                        </div>
-                        <div class="chat-messages">
-                            <div class="chat-msg user">J'ai vu ce token MOONX qui monte vite, voici le contrat :
-                                0x4e15361fd6b4bb609fa63c81a2be19d873717870</div>
-                            <div class="chat-msg bot"><strong>🛡️ AUDIT NFA — MOONX (MX)</strong>
-                                ━━━━━━━━━━━━━━━━━━━━━━━
-                                SCORE DE RISQUE : <strong>17/22</strong>
-
-                                🔴 mint() illimité — l'owner peut créer des tokens à l'infini
-                                🔴 Vente bloquée pour non-whitelistés (honeypot)
-                                🔴 Le deployer a vendu 89% de ses tokens il y a 6h
-                                🟠 Top 3 wallets concentrent 71% du supply
-                                🟠 Contrat déployé il y a seulement 3 jours
-
-                                <strong>⛔ VERDICT : DANGER — NE PAS ACHETER</strong>
-
-                                Pattern classique de rug pull. Le deployer a déjà quitinvariance. Tu peux acheter mais
-                                tu ne pourras jamais vendre.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Scénario 2 — Surveillance de nuit</div>
-                    <div class="chat-demo">
-                        <div class="chat-bar">
-                            <div class="chat-bar-dot"></div>
-                            <div class="chat-bar-name">NFA PROTECTOR · ALERTE AUTOMATIQUE · 3H12</div>
-                        </div>
-                        <div class="chat-messages">
-                            <div class="chat-msg bot"><strong>⚠️ ALERTE LIQUIDATION — ETH/USDT</strong>
-
-                                Ton levier 10x ETH approche du niveau critique.
-
-                                Prix actuel : $3,198 (-4.2% en 1h)
-                                Ton prix de liquidation : $3,150
-                                Distance restante : <strong>seulement 1.5%</strong>
-
-                                Un wallet de 8.4M$ vient de vendre sur Binance.
-
-                                <strong>Que veux-tu faire ?</strong>
-                                → Réponds "réduire" pour que je t'explique comment
-                                → Réponds "fermer" pour te guider vers la fermeture
-                                → Réponds "garder" pour ignorer cette alerte
-                            </div>
-                            <div class="chat-msg user">réduire</div>
-                            <div class="chat-msg bot">Pour réduire ta position maintenant :
-                                1. Va sur Binance Futures
-                                2. Clique sur ta position ETH/USDT
-                                3. "Reduce-only" → vends 50% de ta position
-                                4. Cela remonte ton prix de liquidation à ~$2,800
-
-                                <strong>Je continue la surveillance.</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Scénario 3 — Déploiement du NFA (une seule fois)</div>
-                    <div class="chat-demo">
-                        <div class="chat-bar">
-                            <div class="chat-bar-dot"></div>
-                            <div class="chat-bar-name">NFA PROTECTOR · SETUP</div>
-                        </div>
-                        <div class="chat-messages">
-                            <div class="chat-msg user">Déploie mon Protector NFA avec risque max 20% et scan rugs sur
-                                BSC</div>
-                            <div class="chat-msg bot"><strong>🚀 NFA DÉPLOYÉ SUR BNB CHAIN</strong>
-                                ━━━━━━━━━━━━━━━━━━━━━━━
-                                Nom : Mon Protecteur BSC
-                                Token ID : #42
-                                Wallet NFA : 0x7f3a...9b2c
-                                Réseau : BNB Chain Testnet
-                                Tolérance risque : 20/100
-
-                                <strong>⬡ Transaction confirmée on-chain</strong>
-
-                                Ton NFA est maintenant <strong>vivant sur BNB Chain.</strong>
-                                Il va surveiller tes tokens et positions toutes les 30 min.
-
-                                → /guard BTC → surveiller BTC
-                                → /audit 0x... → auditer un token
-                                → /p2p user → vérifier un vendeur
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 6 : AVANTAGES -->
-            <div class="section" id="avantages">
-                <div class="section-header">
-                    <div class="section-num">06</div>
-                    <div class="section-title">Avantages Clés</div>
-                </div>
-
-                <div class="adv-grid">
-                    <div class="adv-card">
-                        <div class="adv-icon">⚡</div>
-                        <div class="adv-title">Prévention en temps réel</div>
-                        <div class="adv-desc">Agit AVANT la perte, pas après. Le seul outil qui intervient au moment de
-                            la décision.</div>
-                    </div>
-                    <div class="adv-card">
-                        <div class="adv-icon">💬</div>
-                        <div class="adv-title">Zéro friction</div>
-                        <div class="adv-desc">Tu parles en français dans WhatsApp. Pas d'application à ouvrir, pas
-                            d'interface à apprendre.</div>
-                    </div>
-                    <div class="adv-card">
-                        <div class="adv-icon">🔒</div>
-                        <div class="adv-title">Privacy totale</div>
-                        <div class="adv-desc">Tourne sur ta machine. Tes clés API et données ne quittent jamais ton
-                            ordinateur.</div>
-                    </div>
-                    <div class="adv-card">
-                        <div class="adv-icon">🆓</div>
-                        <div class="adv-title">100% gratuit</div>
-                        <div class="adv-desc">Aucun abonnement. Aucun serveur. Uniquement des APIs publiques gratuites.
-                        </div>
-                    </div>
-                    <div class="adv-card">
-                        <div class="adv-icon">🌍</div>
-                        <div class="adv-title">Pour tout le monde</div>
-                        <div class="adv-desc">Du débutant total au trader pro. L'IA s'adapte au niveau de l'utilisateur.
-                        </div>
-                    </div>
-                    <div class="adv-card">
-                        <div class="adv-icon">⬡</div>
-                        <div class="adv-title">Natif BNB Chain</div>
-                        <div class="adv-desc">Utilise les standards BAP-578 et ERC-8004 lancés en février 2026 par BNB
-                            Chain.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 7 : COÛT -->
-            <div class="section" id="cout">
-                <div class="section-header">
-                    <div class="section-num">07</div>
-                    <div class="section-title">Coût & Stack Technique</div>
-                </div>
-
-                <div class="card" style="padding:0;overflow:hidden">
-                    <table class="cost-table">
-                        <thead>
-                            <tr>
-                                <th>Composant</th>
-                                <th>Usage</th>
-                                <th>Coût</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>OpenClaw</strong></td>
-                                <td>Agent IA local (WhatsApp/Telegram)</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>BSCScan API</strong></td>
-                                <td>Audit smart contracts, données on-chain</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Binance P2P API</strong></td>
-                                <td>Vérification vendeurs P2P</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Binance Market API</strong></td>
-                                <td>Prix, volumes, orderbook en temps réel</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>BNB Testnet Faucet</strong></td>
-                                <td>Déploiement du smart contract NFA</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Python + web3.py</strong></td>
-                                <td>Moteur d'analyse et connexion blockchain</td>
-                                <td><span class="cost-val">GRATUIT</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>TOTAL</strong></td>
-                                <td>Installation complète, usage illimité</td>
-                                <td><span class="cost-val">$0.00</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="card" style="padding:0;overflow:hidden;margin-top:16px">
-                    <div style="padding:16px 20px;border-bottom:1px solid var(--border);">
-                        <div class="card-title">Stack Technique</div>
-                    </div>
-                    <div class="tech-row">
-                        <div class="tech-icon">🦞</div>
-                        <div class="tech-name">OpenClaw</div>
-                        <div class="tech-desc">Agent IA open-source — gère la messagerie, la mémoire persistante et les
-                            heartbeats automatiques</div>
-                        <div class="tech-free">Open Source</div>
-                    </div>
-                    <div class="tech-row">
-                        <div class="tech-icon">⬡</div>
-                        <div class="tech-name">BNB Chain (BSC)</div>
-                        <div class="tech-desc">Blockchain sur laquelle vit le NFA — standards BAP-578 + ERC-8004
-                            (standards agents IA, fév. 2026)</div>
-                        <div class="tech-free">Public</div>
-                    </div>
-                    <div class="tech-row">
-                        <div class="tech-icon">🔷</div>
-                        <div class="tech-name">Solidity + web3.py</div>
-                        <div class="tech-desc">Smart contract NFAProtector.sol + moteur Python pour les interactions
-                            blockchain</div>
-                        <div class="tech-free">Open Source</div>
-                    </div>
-                    <div class="tech-row">
-                        <div class="tech-icon">🔍</div>
-                        <div class="tech-name">BSCScan API</div>
-                        <div class="tech-desc">Accès au code source des contrats, historique des transactions, données
-                            des holders</div>
-                        <div class="tech-free">Gratuit</div>
-                    </div>
-                    <div class="tech-row">
-                        <div class="tech-icon">📊</div>
-                        <div class="tech-name">Binance APIs publiques</div>
-                        <div class="tech-desc">Prix en temps réel, données P2P, orderbook — aucune authentification
-                            requise</div>
-                        <div class="tech-free">Gratuit</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 8 : CONCOURS -->
-            <div class="section" id="concours">
-                <div class="section-header">
-                    <div class="section-num">08</div>
-                    <div class="section-title">Contexte du Concours</div>
-                </div>
-
-                <div class="comp-box" style="margin-bottom:16px">
-                    <p><strong>OpenClaw × Binance AI Builder Challenge</strong> est un hackathon lancé le 4 mars 2026 et
-                        clôturant le 18 mars 2026. L'objectif : construire un assistant IA avec OpenClaw qui améliore
-                        l'expérience des utilisateurs Binance. Le meilleur projet remporte une part d'un prize pool en
-                        BNB.</p>
-                </div>
-
-                <div class="card">
-                    <div class="card-title">Pourquoi CLAW NFA Protector est positionné pour gagner</div>
-                    <ul class="check-list">
-                        <li><strong>Utilise exactement la nouvelle infrastructure BNB Chain</strong> — les standards
-                            BAP-578 et ERC-8004 ont été lancés en février 2026. Ce hackathon a été créé précisément pour
-                            trouver des builders qui construisent dessus. Notre solution est la seule à les utiliser.
-                        </li>
-                        <li><strong>Résout le vrai problème n°1</strong> — les pertes par rug pulls, scams P2P et
-                            liquidations représentent des milliards perdus chaque année sur Binance. Ce n'est pas un
-                            outil éducatif ou un dashboard de plus — c'est une protection active.</li>
-                        <li><strong>Testable immédiatement par le jury</strong> — le jury ouvre Telegram, parle au bot,
-                            voit l'audit d'un vrai token, voit le NFA se déployer. Pas besoin d'installer quoi que ce
-                            soit.</li>
-                        <li><strong>OpenClaw est parfait pour ça</strong> — mémoire persistante, heartbeats toutes les
-                            30 min, connexion WhatsApp/Telegram, exécution locale. Tout ce dont un NFA Protector a
-                            besoin est déjà là.</li>
-                        <li><strong>Zéro coût</strong> — aucun abonnement, aucun serveur. Tourne sur l'ordinateur de
-                            l'utilisateur.</li>
-                    </ul>
-                </div>
-
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-                    <span class="tag tag-green">BAP-578</span>
-                    <span class="tag tag-green">ERC-8004</span>
-                    <span class="tag tag-blue">OpenClaw Skill</span>
-                    <span class="tag tag-blue">BNB Chain</span>
-                    <span class="tag tag-amber">Hackathon 2026</span>
-                    <span class="tag tag-amber">100% Gratuit</span>
-                </div>
-            </div>
-
-            <!-- SECTION 9 : LIENS -->
-            <div class="section" id="liens">
-                <div class="section-header">
-                    <div class="section-num">09</div>
-                    <div class="section-title">Liens & Ressources</div>
-                </div>
-
-                <a class="link-row" href="https://anonymousrod.github.io/claw-nfa-protector/demo.html" target="_blank">
-                    <div class="link-icon">🌐</div>
-                    <div class="link-text">Démo Interactive en ligne</div>
-                    <div class="link-url">anonymousrod.github.io/claw-nfa-protector/demo.html</div>
-                </a>
-
-                <a class="link-row" href="https://github.com/anonymousrod/claw-nfa-protector" target="_blank">
-                    <div class="link-icon">💻</div>
-                    <div class="link-text">Code source complet sur GitHub</div>
-                    <div class="link-url">github.com/anonymousrod/claw-nfa-protector</div>
-                </a>
-
-                <a class="link-row" href="https://openclaw.ai" target="_blank">
-                    <div class="link-icon">🦞</div>
-                    <div class="link-text">OpenClaw — le moteur de l'agent</div>
-                    <div class="link-url">openclaw.ai</div>
-                </a>
-
-                <a class="link-row" href="https://www.bnbchain.org" target="_blank">
-                    <div class="link-icon">⬡</div>
-                    <div class="link-text">BNB Chain — la blockchain du NFA</div>
-                    <div class="link-url">bnbchain.org</div>
-                </a>
-
-                <div class="info-box" style="margin-top:20px">
-                    📦 <strong>Fichiers inclus dans le projet :</strong><br>
-                    <code>demo.html</code> — Démo interactive complète (ouvrir dans le navigateur)<br>
-                    <code>SKILL.md</code> — Le skill OpenClaw complet (le cerveau de l'agent)<br>
-                    <code>scripts/nfa_core.py</code> — Moteur Python (audit, P2P, guard, tax)<br>
-                    <code>contracts/NFAProtector.sol</code> — Smart contract Solidity (BNB Chain)
-                </div>
-            </div>
-
-            <!-- FOOTER -->
-            <div class="footer">
-                <p><strong>CLAW NFA PROTECTOR</strong> — OpenClaw × Binance AI Builder Challenge — Mars 2026</p>
-                <p style="margin-top:6px">Conçu et développé avec ❤️ · BNB Chain · BAP-578 · ERC-8004 · 100% Open Source
-                    · $0.00</p>
-            </div>
-
         </div>
+
+        <!-- ══════════════════════════════════════════════════
+     05 — DÉMOS
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s5">
+            <div class="sec-head">
+                <div class="sec-num">05</div>
+                <div class="sec-title fr-block">Exemples de Conversation Réels</div>
+                <div class="sec-title en-block">Real Conversation Examples</div>
+            </div>
+
+            <div class="card">
+                <div class="card-label fr-block">Scénario 1 — Avant d'acheter un token</div>
+                <div class="card-label en-block">Scenario 1 — Before buying a token</div>
+                <div class="chat-wrap">
+                    <div class="chat-head">
+                        <div class="chat-dot"></div>
+                        <div class="chat-lbl">NFA PROTECTOR · ACTIF</div>
+                    </div>
+                    <div class="chat-body">
+                        <div class="msg user fr-block">J'ai vu ce token MOONX qui monte vite :
+                            0x4e15361fd6b4bb609fa63c81a2be19d873717870</div>
+                        <div class="msg user en-block">I saw this MOONX token pumping fast:
+                            0x4e15361fd6b4bb609fa63c81a2be19d873717870</div>
+                        <div class="msg bot"><strong>🛡️ AUDIT NFA — MOONX (MX)</strong>
+                            SCORE DE RISQUE : <strong>17/22</strong>
+
+                            🔴 mint() illimité — owner peut créer des tokens à l'infini
+                            🔴 Vente bloquée pour non-whitelistés (honeypot)
+                            🔴 Deployer a vendu 89% de ses tokens il y a 6h
+                            🟠 Top 3 wallets : 71% du supply
+
+                            <strong>⛔ VERDICT : DANGER — NE PAS ACHETER</strong>
+                            Tu peux acheter mais tu ne pourras jamais vendre.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-label fr-block">Scénario 2 — Alerte automatique à 3h du matin</div>
+                <div class="card-label en-block">Scenario 2 — Automatic alert at 3 AM</div>
+                <div class="chat-wrap">
+                    <div class="chat-head">
+                        <div class="chat-dot"></div>
+                        <div class="chat-lbl">NFA PROTECTOR · ALERTE AUTO · 3:12 AM</div>
+                    </div>
+                    <div class="chat-body">
+                        <div class="msg bot"><strong>⚠️ ALERTE LIQUIDATION — ETH/USDT</strong>
+
+                            Ton levier 10x ETH approche du niveau critique.
+
+                            Prix actuel : $3,198 (-4.2% en 1h)
+                            Prix de liquidation : $3,150
+                            Distance restante : <strong>seulement 1.5%</strong>
+
+                            Un wallet de $8.4M vient de vendre sur Binance.
+
+                            Réponds "réduire", "fermer" ou "garder".</div>
+                        <div class="msg user fr-block">réduire</div>
+                        <div class="msg user en-block">reduce</div>
+                        <div class="msg bot fr-block">Pour réduire maintenant :
+                            1. Binance Futures → ta position ETH
+                            2. "Reduce-only" → vends 50%
+                            3. Ton prix de liquidation remonte à ~$2,800
+
+                            <strong>Je continue la surveillance.</strong>
+                        </div>
+                        <div class="msg bot en-block">To reduce now:
+                            1. Binance Futures → your ETH position
+                            2. "Reduce-only" → sell 50%
+                            3. Your liquidation price moves up to ~$2,800
+
+                            <strong>Monitoring continues.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════
+     06 — AVANTAGES
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s6">
+            <div class="sec-head">
+                <div class="sec-num">06</div>
+                <div class="sec-title fr-block">Avantages Clés</div>
+                <div class="sec-title en-block">Key Advantages</div>
+            </div>
+
+            <div class="adv-grid">
+                <div class="adv-card">
+                    <span class="adv-ic">⚡</span>
+                    <div class="adv-t fr-block">Prévention en temps réel</div>
+                    <div class="adv-t en-block">Real-time prevention</div>
+                    <div class="adv-d fr-block">Agit AVANT la perte. Pas après.</div>
+                    <div class="adv-d en-block">Acts BEFORE the loss. Not after.</div>
+                </div>
+                <div class="adv-card">
+                    <span class="adv-ic">💬</span>
+                    <div class="adv-t fr-block">Zéro friction</div>
+                    <div class="adv-t en-block">Zero friction</div>
+                    <div class="adv-d fr-block">Tu parles en WhatsApp. Pas d'appli à ouvrir.</div>
+                    <div class="adv-d en-block">You talk on WhatsApp. No app to open.</div>
+                </div>
+                <div class="adv-card">
+                    <span class="adv-ic">🔒</span>
+                    <div class="adv-t fr-block">Privacy totale</div>
+                    <div class="adv-t en-block">Full privacy</div>
+                    <div class="adv-d fr-block">Tourne sur ta machine. Tes données ne quittent jamais ton PC.</div>
+                    <div class="adv-d en-block">Runs on your machine. Your data never leaves your PC.</div>
+                </div>
+                <div class="adv-card">
+                    <span class="adv-ic">🆓</span>
+                    <div class="adv-t fr-block">100% gratuit</div>
+                    <div class="adv-t en-block">100% free</div>
+                    <div class="adv-d fr-block">Aucun abonnement. Aucun serveur. APIs publiques.</div>
+                    <div class="adv-d en-block">No subscription. No server. Public APIs only.</div>
+                </div>
+                <div class="adv-card">
+                    <span class="adv-ic">🌍</span>
+                    <div class="adv-t fr-block">Pour tout le monde</div>
+                    <div class="adv-t en-block">For everyone</div>
+                    <div class="adv-d fr-block">Du débutant total au trader pro. L'IA s'adapte.</div>
+                    <div class="adv-d en-block">From total beginner to pro trader. The AI adapts.</div>
+                </div>
+                <div class="adv-card">
+                    <span class="adv-ic">⬡</span>
+                    <div class="adv-t fr-block">Natif BNB Chain</div>
+                    <div class="adv-t en-block">BNB Chain Native</div>
+                    <div class="adv-d fr-block">Standards BAP-578 + ERC-8004 (fév. 2026).</div>
+                    <div class="adv-d en-block">BAP-578 + ERC-8004 standards (Feb. 2026).</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════
+     07 — COÛT
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s7">
+            <div class="sec-head">
+                <div class="sec-num">07</div>
+                <div class="sec-title fr-block">Coût & Stack Technique</div>
+                <div class="sec-title en-block">Cost & Tech Stack</div>
+            </div>
+
+            <div class="card" style="padding:0;overflow:hidden">
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th data-lang="fr">Composant</th>
+                            <th data-lang="en">Component</th>
+                            <th data-lang="fr">Usage</th>
+                            <th data-lang="en">Usage</th>
+                            <th data-lang="fr">Coût</th>
+                            <th data-lang="en">Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>OpenClaw</strong></td>
+                            <td class="fr-block">Agent IA local (WhatsApp/Telegram)</td>
+                            <td class="en-block">Local AI agent (WhatsApp/Telegram)</td>
+                            <td class="free">FREE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BSCScan API</strong></td>
+                            <td class="fr-block">Audit smart contracts, données on-chain</td>
+                            <td class="en-block">Smart contract audit, on-chain data</td>
+                            <td class="free">FREE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Binance P2P API</strong></td>
+                            <td class="fr-block">Vérification vendeurs P2P</td>
+                            <td class="en-block">P2P seller verification</td>
+                            <td class="free">FREE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Binance Market API</strong></td>
+                            <td class="fr-block">Prix et volumes en temps réel</td>
+                            <td class="en-block">Real-time prices and volumes</td>
+                            <td class="free">FREE</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BNB Testnet Faucet</strong></td>
+                            <td class="fr-block">Déploiement du smart contract NFA</td>
+                            <td class="en-block">NFA smart contract deployment</td>
+                            <td class="free">FREE</td>
+                        </tr>
+                        <tr>
+                            <td><strong data-lang="fr">TOTAL</strong><strong data-lang="en">TOTAL</strong></td>
+                            <td class="fr-block">Installation complète, usage illimité</td>
+                            <td class="en-block">Full installation, unlimited use</td>
+                            <td class="free">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="padding:0;overflow:hidden;margin-top:14px">
+                <div style="padding:14px 18px;border-bottom:1px solid var(--border)">
+                    <div class="card-label fr-block">Stack Technique</div>
+                    <div class="card-label en-block">Tech Stack</div>
+                </div>
+                <div class="tech-row">
+                    <span class="tech-ic">🦞</span>
+                    <span class="tech-n">OpenClaw</span>
+                    <span class="tech-d fr-block">Agent IA open-source — messagerie, mémoire persistante, heartbeats
+                        auto</span>
+                    <span class="tech-d en-block">Open-source AI agent — messaging, persistent memory, auto
+                        heartbeats</span>
+                    <span class="tech-free">Open Source</span>
+                </div>
+                <div class="tech-row">
+                    <span class="tech-ic">⬡</span>
+                    <span class="tech-n">BNB Chain</span>
+                    <span class="tech-d fr-block">Blockchain du NFA — BAP-578 + ERC-8004 (standards agents IA, fév.
+                        2026)</span>
+                    <span class="tech-d en-block">NFA's blockchain — BAP-578 + ERC-8004 (AI agent standards, Feb.
+                        2026)</span>
+                    <span class="tech-free">Public</span>
+                </div>
+                <div class="tech-row">
+                    <span class="tech-ic">🔷</span>
+                    <span class="tech-n">Solidity + web3.py</span>
+                    <span class="tech-d fr-block">Smart contract NFAProtector.sol + moteur Python pour la
+                        blockchain</span>
+                    <span class="tech-d en-block">NFAProtector.sol smart contract + Python engine for blockchain</span>
+                    <span class="tech-free">Open Source</span>
+                </div>
+                <div class="tech-row">
+                    <span class="tech-ic">🐍</span>
+                    <span class="tech-n">Python 3.12</span>
+                    <span class="tech-d fr-block">Moteur d'analyse des risques — audit, P2P, surveillance, calcul
+                        fiscal</span>
+                    <span class="tech-d en-block">Risk analysis engine — audit, P2P, monitoring, tax calculation</span>
+                    <span class="tech-free">Free</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════
+     08 — CONCOURS
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s8">
+            <div class="sec-head">
+                <div class="sec-num">08</div>
+                <div class="sec-title fr-block">Contexte du Concours</div>
+                <div class="sec-title en-block">Competition Context</div>
+            </div>
+
+            <div class="comp-box">
+                <p class="fr-block"><strong>OpenClaw × Binance AI Builder Challenge</strong> est un hackathon lancé le 4
+                    mars 2026, clôturant le 18 mars 2026. L'objectif : construire un assistant IA avec OpenClaw qui
+                    améliore l'expérience des utilisateurs Binance. Le meilleur projet remporte une part d'un prize pool
+                    en BNB.</p>
+                <p class="en-block"><strong>OpenClaw × Binance AI Builder Challenge</strong> is a hackathon launched
+                    March 4, 2026, closing March 18, 2026. The goal: build an AI assistant with OpenClaw that improves
+                    the Binance user experience. The best project wins a share of a BNB prize pool.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-label fr-block">Pourquoi ce projet est positionné pour gagner</div>
+                <div class="card-label en-block">Why this project is positioned to win</div>
+                <ul class="chklist fr-block">
+                    <li><strong>Utilise exactement la nouvelle infrastructure BNB Chain</strong> — BAP-578 + ERC-8004
+                        lancés en février 2026. Ce hackathon cherche précisément des builders qui construisent dessus.
+                        Notre solution est la seule à les utiliser.</li>
+                    <li><strong>Résout le vrai problème n°1</strong> — les pertes par rug pulls, scams P2P et
+                        liquidations représentent des milliards perdus chaque année. Ce n'est pas un dashboard de plus —
+                        c'est une protection active.</li>
+                    <li><strong>Testable immédiatement par le jury</strong> — le jury ouvre Telegram, parle au bot, voit
+                        l'audit d'un vrai token. Pas besoin d'installer quoi que ce soit.</li>
+                    <li><strong>Zéro coût</strong> — aucun abonnement, aucun serveur. Tourne sur l'ordinateur de
+                        l'utilisateur.</li>
+                </ul>
+                <ul class="chklist en-block">
+                    <li><strong>Uses exactly BNB Chain's new infrastructure</strong> — BAP-578 + ERC-8004 launched Feb.
+                        2026. This hackathon was created to find builders who build on them. Ours is the only solution
+                        using them.</li>
+                    <li><strong>Solves the #1 real problem</strong> — losses from rug pulls, P2P scams and liquidations
+                        represent billions lost every year. This is not another dashboard — it's active protection.</li>
+                    <li><strong>Immediately testable by the jury</strong> — the jury opens Telegram, talks to the bot,
+                        sees a real token audit. No installation needed.</li>
+                    <li><strong>Zero cost</strong> — no subscription, no server. Runs on the user's own computer.</li>
+                </ul>
+                <div class="tags">
+                    <span class="tag tg">BAP-578</span>
+                    <span class="tag tg">ERC-8004</span>
+                    <span class="tag tb">OpenClaw Skill</span>
+                    <span class="tag tb">BNB Chain</span>
+                    <span class="tag ta">Hackathon 2026</span>
+                    <span class="tag tg">100% Free</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════════════
+     09 — LIENS
+══════════════════════════════════════════════════ -->
+        <div class="section" id="s9">
+            <div class="sec-head">
+                <div class="sec-num">09</div>
+                <div class="sec-title fr-block">Liens & Ressources</div>
+                <div class="sec-title en-block">Links & Resources</div>
+            </div>
+
+            <a class="link-card" href="https://anonymousrod.github.io/claw-nfa-protector/demo.html" target="_blank">
+                <span class="link-ic">🌐</span>
+                <span class="link-t fr-block">Démo Interactive en ligne</span>
+                <span class="link-t en-block">Live Interactive Demo</span>
+                <span class="link-url">anonymousrod.github.io/.../demo.html</span>
+            </a>
+
+            <a class="link-card" href="https://github.com/anonymousrod/claw-nfa-protector" target="_blank">
+                <span class="link-ic">💻</span>
+                <span class="link-t fr-block">Code source complet — GitHub</span>
+                <span class="link-t en-block">Full source code — GitHub</span>
+                <span class="link-url">github.com/anonymousrod/claw-nfa-protector</span>
+            </a>
+
+            <a class="link-card" href="https://openclaw.ai" target="_blank">
+                <span class="link-ic">🦞</span>
+                <span class="link-t fr-block">OpenClaw — le moteur de l'agent</span>
+                <span class="link-t en-block">OpenClaw — the agent engine</span>
+                <span class="link-url">openclaw.ai</span>
+            </a>
+
+            <a class="link-card" href="https://www.bnbchain.org" target="_blank">
+                <span class="link-ic">⬡</span>
+                <span class="link-t fr-block">BNB Chain — la blockchain du NFA</span>
+                <span class="link-t en-block">BNB Chain — the NFA's blockchain</span>
+                <span class="link-url">bnbchain.org</span>
+            </a>
+
+            <div class="info-box fr-block" style="margin-top:16px">
+                📦 <strong>Fichiers du projet :</strong><br>
+                <code>demo.html</code> — Démo interactive (ouvrir dans le navigateur)<br>
+                <code>SKILL.md</code> — Le skill OpenClaw complet (le cerveau)<br>
+                <code>scripts/nfa_core.py</code> — Moteur Python (audit, P2P, guard, tax)<br>
+                <code>contracts/NFAProtector.sol</code> — Smart contract Solidity (BNB Chain)
+            </div>
+
+            <div class="info-box en-block" style="margin-top:16px">
+                📦 <strong>Project files:</strong><br>
+                <code>demo.html</code> — Interactive demo (open in browser)<br>
+                <code>SKILL.md</code> — The full OpenClaw skill (the brain)<br>
+                <code>scripts/nfa_core.py</code> — Python engine (audit, P2P, guard, tax)<br>
+                <code>contracts/NFAProtector.sol</code> — Solidity smart contract (BNB Chain)
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><strong>CLAW NFA PROTECTOR</strong> · OpenClaw × Binance AI Builder Challenge · March 2026</p>
+            <p style="margin-top:4px">BNB Chain · BAP-578 · ERC-8004 · 100% Open Source · $0.00</p>
+        </div>
+
+    </div><!-- /wrap -->
+
+    <script>
+        function setLang(l) {
+            document.body.classList.toggle('en', l === 'en');
+            document.getElementById('btn-fr').classList.toggle('active', l === 'fr');
+            document.getElementById('btn-en').classList.toggle('active', l === 'en');
+            document.documentElement.lang = l;
+            localStorage.setItem('lang', l);
+        }
+
+        // Restore saved language
+        const saved = localStorage.getItem('lang');
+        if (saved) setLang(saved);
+    </script>
 </body>
 
 </html>
